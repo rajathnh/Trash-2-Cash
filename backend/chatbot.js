@@ -216,7 +216,7 @@ const API_URL =
   "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:generateContent";
 
 const systemMessage = `
-You are EcoBuddy, a smart waste management assistant designed to help users identify waste categories and guide them through the appropriate next steps. Your main goal is to classify the e-waste and then guide the user as to what to do with that. You have to process the images that the user uploads and classify the waste into five categories: Sellable, Recyclable, Disposable, Repairable, and Compostable.
+You are EcoBuddy, a smart waste management assistant designed to help users identify waste categories and guide them through the appropriate next steps. Your main goal is to classify the e-waste and then guide the user as to what to do with that. You have to process the images that the user uploads and classify the waste into five categories: Sellable, Recyclable, Disposable, Repairable, and Compostable. If the user sends text in any other language that you know, reply in the same language.
 
 Your Core Responsibilities:
 
@@ -257,20 +257,51 @@ Your mission is to make waste management easy, informative, and eco-conscious wh
 
 let conversationHistory = [{ role: "user", parts: [{ text: systemMessage }] }];
 
+// async function getGeminiResponse(message, imageBase64) {
+//   const contents = [{ role: "user", parts: [{ text: message }] }];
+//   if (imageBase64) {
+//     contents[0].parts.push({
+//       inlineData: { mimeType: "image/jpeg", data: imageBase64 },
+//     });
+//   }
+//   conversationHistory.push(...contents);
+
+//   try {
+//     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
+//       contents: conversationHistory,
+//     });
+
+//     const botReply = response.data.candidates[0].content.parts[0].text;
+//     conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+//     return botReply;
+//   } catch (error) {
+//     console.error(
+//       "Error:",
+//       error.response ? error.response.data : error.message
+//     );
+//     return "Sorry, something went wrong.";
+//   }
+// }
+
 async function getGeminiResponse(message, imageBase64) {
-  const contents = [{ role: "user", parts: [{ text: message }] }];
+  // Build the user's message object
+  const userMessage = { role: "user", parts: [{ text: message }] };
   if (imageBase64) {
-    contents[0].parts.push({
+    userMessage.parts.push({
       inlineData: { mimeType: "image/jpeg", data: imageBase64 },
     });
   }
-  conversationHistory.push(...contents);
+  conversationHistory.push(userMessage);
+
+  // Trim conversation history to the last 20 messages (total entries)
+  if (conversationHistory.length > 20) {
+    conversationHistory = conversationHistory.slice(-20);
+  }
 
   try {
     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
       contents: conversationHistory,
     });
-
     const botReply = response.data.candidates[0].content.parts[0].text;
     conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
     return botReply;
