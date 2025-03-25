@@ -1,0 +1,121 @@
+/* Basic resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set background color of the entire page */
+body {
+  background-color: #e8ecf1;
+  font-family: Arial, sans-serif;
+}
+
+/* Chat container styling */
+.chat-container {
+  width: 100%;
+  max-width: 800px; /* Slightly increased width for better readability */
+  height: 85vh; /* Increased height */
+  margin: 60px auto; /* Provides space from navbar and footer */
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* Header */
+.chat-header {
+  background: linear-gradient(to right, #2563eb, #9333ea);
+  color: #fff;
+  padding: 1rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Chat box */
+.chat-box {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #f7f7f7;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Message styling */
+.message {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  max-width: 75%;
+  word-wrap: break-word;
+  font-size: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* User and assistant message styles */
+.message.user {
+  background-color: #dcedc8;
+  align-self: flex-end;
+}
+
+.message.assistant {
+  background-color: #e0f7fa;
+  align-self: flex-start;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  align-items: center;
+}
+
+/* Message Input */
+.input-container input[type="text"] {
+  flex: 1.5; /* Increased width */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* File Input */
+.input-container .file-input {
+  font-size: 0.9rem;
+}
+
+/* Send Button */
+.send-button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #2563eb, #9333ea);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.send-button:hover {
+  background: linear-gradient(to right, #1e40af, #7e22ce);
+  transform: scale(1.02);
+}
+
+/* Ensure proper spacing at the bottom of chat box */
+.chat-box::after {
+  content: "";
+  display: block;
+  height: 12px;
+}
