@@ -221,7 +221,7 @@ const API_URL =
 
 // The system prompt for EcoBuddy
 const systemMessage = `
-You are EcoBuddy, a smart waste management assistant designed to help users identify waste categories and guide them through the appropriate next steps. Your main goal is to classify the e-waste and then guide the user as to what to do with that. You have to process the images that the user uploads and classify the waste into five categories: Sellable, Recyclable, Disposable, Repairable, and Compostable. If the user sends text in any other language that you know, reply in the same language.
+You are EcoBuddy, a smart waste management assistant designed to help users identify waste categories and guide them through the appropriate next steps. Your main goal is to classify the e-waste and then guide the user as to what to do with that. You have to process the images that the user uploads and classify the waste into five categories: Sellable, Recyclable, Disposable, Repairable, and Compostable. If the user sends text in any other language that you know, reply in the same language. Don't forget to introduce yourself in the beginning of the conversation if the user sends any greeting message. 
 
 Your Core Responsibilities:
 
@@ -238,7 +238,7 @@ If they agree, provide a URL to the e-waste marketplace and guide them through t
 For Recyclable items:
 Inform the user about recycling options.
 Ask if they’d like to request a pickup for their recyclable item.
-If they agree, redirect them to the "Trash to Cash" organization’s website where they can request a pickup. This is the link of that website -- https://www.trashtocash.co.in
+If they agree, redirect them to the "Trash to Cash" organization’s website where they can request a pickup. This is the link of that website -- https://www.trashtocash.co.in  -- provide it as the hyperlink
 
 For Disposable items:
 Advise on responsible disposal methods and local regulations.
@@ -262,7 +262,10 @@ Your mission is to make waste management easy, informative, and eco-conscious wh
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
@@ -273,50 +276,111 @@ mongoose
  * - Sends the full conversation history to the Gemini API.
  * - Stores Gemini’s response in the history and saves the updated record.
  */
+// async function getGeminiResponse(userId, message, imageBase64) {
+//   // Look for an existing ChatHistory document for the user
+//   let chatHistoryDoc = await ChatHistory.findOne({ userId });
+//   if (!chatHistoryDoc) {
+//     // If none exists, create one with the system prompt as the first message.
+//     chatHistoryDoc = new ChatHistory({
+//       userId,
+//       messages: [
+//         { role: "assistant", content: systemMessage, timestamp: new Date() }
+//       ],
+//     });
+//   }
+
+//   // Append the user's message
+//   const userMessage = { role: "user", content: message, timestamp: new Date() };
+
+//   // Store the base64 image data if available.
+//   if (imageBase64) {
+//     userMessage.imageData = imageBase64;
+//   }
+//   chatHistoryDoc.messages.push(userMessage);
+
+//   // Prepare conversation history for Gemini.
+//   // Here we convert the messages into Gemini's expected format.
+//   const conversationForGemini = chatHistoryDoc.messages.map((msg) => {
+//     const parts = [{ text: msg.content }];
+//     // If the message has stored imageData, include it in inlineData.
+//     if (msg.imageData) {
+//       parts.push({
+//         inlineData: { mimeType: "image/jpeg", data: msg.imageData },
+//       });
+//     }
+//     // Adjust role names ("assistant" to "model")
+//     const role = msg.role === "assistant" ? "model" : msg.role;
+//     return { role, parts };
+//   });
+
+//   // If the conversation is long, trim it down (for example, last 10 entries).
+//   const MAX_MESSAGES = 20;
+//   const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
+
+//   try {
+//     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
+//       contents: trimmedConversation,
+//     });
+//     const botReply = response.data.candidates[0].content.parts[0].text;
+
+//     // Append Gemini's response to the history
+//     chatHistoryDoc.messages.push({
+//       role: "assistant",
+//       content: botReply,
+//       timestamp: new Date(),
+//     });
+
+//     // Save the updated chat history
+//     await chatHistoryDoc.save();
+
+//     return botReply;
+//   } catch (error) {
+//     console.error(
+//       "Error:",
+//       error.response ? error.response.data : error.message
+//     );
+//     return "Sorry, something went wrong.";
+//   }
+// }
+
 async function getGeminiResponse(userId, message, imageBase64) {
   // Look for an existing ChatHistory document for the user
   let chatHistoryDoc = await ChatHistory.findOne({ userId });
   if (!chatHistoryDoc) {
-    // If none exists, create one with the system prompt as the first message.
     chatHistoryDoc = new ChatHistory({
       userId,
-      messages: [
-        { role: "assistant", content: systemMessage, timestamp: new Date() }
-      ],
+      messages: [],
     });
   }
 
   // Append the user's message
   const userMessage = { role: "user", content: message, timestamp: new Date() };
 
-  // Store the base64 image data if available.
   if (imageBase64) {
     userMessage.imageData = imageBase64;
   }
   chatHistoryDoc.messages.push(userMessage);
 
-  // Prepare conversation history for Gemini.
-  // Here we convert the messages into Gemini's expected format.
-  const conversationForGemini = chatHistoryDoc.messages.map((msg) => {
-    const parts = [{ text: msg.content }];
-    // If the message has stored imageData, include it in inlineData.
-    if (msg.imageData) {
-      parts.push({
-        inlineData: { mimeType: "image/jpeg", data: msg.imageData },
-      });
-    }
-    // Adjust role names ("assistant" to "model")
-    const role = msg.role === "assistant" ? "model" : msg.role;
-    return { role, parts };
-  });
-
-  // If the conversation is long, trim it down (for example, last 10 entries).
-  const MAX_MESSAGES = 20;
-  const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
+  // Prepare conversation history for Gemini
+  const conversationForGemini = [
+    { role: "user", parts: [{ text: systemMessage }] }, // Send systemMessage as the first user message
+    ...chatHistoryDoc.messages
+      .map((msg) => {
+        const parts = [{ text: msg.content }];
+        if (msg.imageData) {
+          parts.push({
+            inlineData: { mimeType: "image/jpeg", data: msg.imageData },
+          });
+        }
+        const role = msg.role === "assistant" ? "model" : msg.role;
+        return { role, parts };
+      })
+      .slice(-20), // Keep last 20 messages from user-assistant conversation
+  ];
 
   try {
     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
-      contents: trimmedConversation,
+      contents: conversationForGemini,
     });
     const botReply = response.data.candidates[0].content.parts[0].text;
 
@@ -346,7 +410,7 @@ app.post("/chat", upload.single("image"), async (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
-  
+
   let imageBase64 = null;
   if (req.file) {
     const imagePath = path.join(__dirname, req.file.path);
