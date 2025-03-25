@@ -1,0 +1,47 @@
+{
+    "name": "Legion",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@cashfreepayments/cashfree-js": "^1.0.5",
+        "@google/generative-ai": "^0.21.0",
+        "axios": "^1.7.9",
+        "bcryptjs": "^2.4.3",
+        "cloudinary": "^2.5.1",
+        "cookie-parser": "^1.4.5",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "ejs": "^3.1.10",
+        "express": "^4.17.1",
+        "express-async-errors": "^3.1.1",
+        "express-fileupload": "^1.2.1",
+        "express-mongo-sanitize": "^2.1.0",
+        "express-rate-limit": "^5.4.1",
+        "helmet": "^4.6.0",
+        "http-status-codes": "^2.1.4",
+        "joi": "^17.4.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongo": "^0.1.0",
+        "mongodb": "^6.10.0",
+        "mongoose": "^8.8.2",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "nodemailer": "^6.9.16",
+        "readline-sync": "^1.4.10",
+        "socket.io": "^4.8.1",
+        "validator": "^13.6.0",
+        "xss-clean": "^0.1.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.9"
+    },
+    "engines": {
+        "node": ">=16.x"
+    }
+}
