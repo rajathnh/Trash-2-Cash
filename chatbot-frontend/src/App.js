@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -55,14 +55,17 @@ function App() {
     if (file) formData.append("image", file);
 
     setInput("");
+    setFile(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/chat", {
-        message: input,
-      });
-      setMessages([
-        ...newMessages,
-        { sender: "bot", text: response.data.reply },
+      const response = await axios.post(
+        "http://localhost:5000/api/chat",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      setMessages((prev) => [
+        ...prev,
+        { sender: "assistant", text: response.data.response },
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -84,13 +87,6 @@ function App() {
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>
             {msg.text}
-            {msg.image && (
-              <img
-                src={URL.createObjectURL(msg.image)}
-                alt="Uploaded"
-                className="uploaded-image"
-              />
-            )}
           </div>
         ))}
       </div>
