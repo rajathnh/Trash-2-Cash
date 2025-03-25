@@ -6,7 +6,7 @@ const chatSchema = new mongoose.Schema({
     {
       role: { type: String, enum: ["user", "assistant"], required: true }, // Who sent the message
       content: { type: String, required: false }, // Text content (if applicable)
-      imageUrl: { type: String, required: false }, // Image URL (if applicable)
+      imageData: { type: String, required: false }, // Base64 image data (if applicable)
       timestamp: { type: Date, default: Date.now } // Message timestamp
     }
   ]

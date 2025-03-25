@@ -344,30 +344,50 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState("");
 
-  // Load messages from local storage on mount
+  // Generate or retrieve userId from local storage
   useEffect(() => {
-    const savedMessages = localStorage.getItem("chatMessages");
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
+    let savedUserId = localStorage.getItem("userId");
+    if (!savedUserId) {
+      // Simple unique id generation. You may want to use a UUID library instead.
+      savedUserId = Date.now().toString() + Math.random().toString(36).substring(2);
+      localStorage.setItem("userId", savedUserId);
     }
+    setUserId(savedUserId);
   }, []);
 
-  // Save messages to local storage whenever messages change
+  // Fetch chat history from backend when userId is set
   useEffect(() => {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-  }, [messages]);
+    if (userId) {
+      axios
+        .get(`http://localhost:5000/history/${userId}`)
+        .then((res) => {
+          if (res.data.messages) {
+            // Map backend messages to front-end message format.
+            const fetchedMessages = res.data.messages.map((msg) => ({
+              sender: msg.role === "assistant" ? "bot" : "user",
+              text: msg.content,
+              image: msg.imageUrl || null,
+            }));
+            setMessages(fetchedMessages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching history:", error);
+        });
+    }
+  }, [userId]);
 
   const sendMessage = async () => {
     if (!input.trim() && !image) return;
 
-    // Create a new messages array
+    // Append user's text and image preview to the chat UI
     const newMessages = [...messages];
-    if (input) {
+    if (input.trim()) {
       newMessages.push({ sender: "user", text: input });
     }
     if (image) {
-      // Add image preview immediately using URL.createObjectURL
       newMessages.push({
         sender: "user",
         image: URL.createObjectURL(image),
@@ -378,22 +398,19 @@ function App() {
     // Prepare form data to send to backend
     const formData = new FormData();
     formData.append("message", input);
+    formData.append("userId", userId);
     if (image) {
       formData.append("image", image);
     }
 
-    // Clear input and image state
+    // Clear the input and image state
     setInput("");
     setImage(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/chat",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post("http://localhost:5000/chat", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       setMessages([
         ...newMessages,
         { sender: "bot", text: response.data.reply },
@@ -407,7 +424,7 @@ function App() {
     }
   };
 
-  // Clear chat history
+  // Optionally, clear chat both on frontend and backend local storage
   const clearChat = () => {
     setMessages([]);
     localStorage.removeItem("chatMessages");
