@@ -267,60 +267,115 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 /**
- * getGeminiResponse:
- * - Fetches or creates a ChatHistory record for the given user.
- * - Adds the new user message (and image data if provided) to the history.
- * - Sends the full conversation history to the Gemini API.
- * - Stores Gemini’s response in the history and saves the updated record.
+ * getNearbyDisposalCenters:
+ * Queries the Google Places API for nearby e-waste disposal centers
+ * given a userLocation object with {latitude, longitude}.
+ * Returns an array of up to 5 results.
  */
-async function getGeminiResponse(userId, message, imageBase64) {
-  // Look for an existing ChatHistory document for the user
+async function getNearbyDisposalCenters(userLocation) {
+  const { latitude, longitude } = userLocation;
+  const radius = 2000; // 2 km in meters
+  const keyword = "ewaste disposal";
+  const mapsUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&keyword=${encodeURIComponent(keyword)}&key=${process.env.MAPS_API_KEY}`;
+  try {
+    const response = await axios.get(mapsUrl);
+    console.log("Places API response:", response.data);
+    return response.data.results.slice(0, 5);
+  } catch (error) {
+    console.error("Error fetching nearby disposal centers:", error);
+    return [];
+  }
+}
+
+/**
+ * getGeminiResponse:
+ * - Retrieves (or creates) a ChatHistory document.
+ * - Appends the user's message (and image data if provided).
+ * - If the message is disposal-related and a location is provided,
+ *   fetches nearby disposal centers and appends an assistant message with that info.
+ * - Prepares the conversation history (ensuring non-empty text fields).
+ * - Sends the conversation to the Gemini API.
+ * - Appends Gemini’s response to the conversation and saves the updated record.
+ */
+async function getGeminiResponse(userId, message, imageBase64, locationStr) {
+  // Retrieve or create ChatHistory for the user
   let chatHistoryDoc = await ChatHistory.findOne({ userId });
   if (!chatHistoryDoc) {
-    // If none exists, create one with the system prompt as the first message.
     chatHistoryDoc = new ChatHistory({
       userId,
-      messages: [
-        { role: "assistant", content: systemMessage, timestamp: new Date() }
-      ],
+      messages: [{ role: "assistant", content: systemMessage, timestamp: new Date() }],
     });
   }
 
   // Append the user's message
   const userMessage = { role: "user", content: message, timestamp: new Date() };
-
-  // Store the base64 image data if available.
   if (imageBase64) {
     userMessage.imageData = imageBase64;
   }
   chatHistoryDoc.messages.push(userMessage);
+  console.log("User message appended:", userMessage);
 
-  // Prepare conversation history for Gemini.
-  // Here we convert the messages into Gemini's expected format.
-  const conversationForGemini = chatHistoryDoc.messages.map((msg) => {
-    const parts = [{ text: msg.content }];
-    // If the message has stored imageData, include it in inlineData.
-    if (msg.imageData) {
-      parts.push({
-        inlineData: { mimeType: "image/jpeg", data: msg.imageData },
-      });
+  // Check for disposal-related query.
+  // Only run this branch if a location string is provided.
+  const disposalKeywords = ["dispose", "disposal", "get rid", "junk"];
+  const messageLower = message.toLowerCase();
+  const isDisposalQuery = disposalKeywords.some(keyword => messageLower.includes(keyword));
+
+  if (isDisposalQuery && locationStr) {
+    console.log("Disposal query detected. Processing location for nearby centers...");
+    try {
+      const userLocation = JSON.parse(locationStr);
+      const centers = await getNearbyDisposalCenters(userLocation);
+      console.log("Fetched centers:", centers);
+      if (centers.length > 0) {
+        let centersString = "\n\nHere are some nearby e‑waste disposal centers:\n";
+        centers.forEach((center, idx) => {
+          centersString += `${idx + 1}. ${center.name} – ${center.vicinity}\n`;
+        });
+        const disposalMessage = {
+          role: "assistant",
+          content: centersString,
+          timestamp: new Date()
+        };
+        chatHistoryDoc.messages.push(disposalMessage);
+        console.log("Disposal branch message appended:", disposalMessage);
+      }
+    } catch (error) {
+      console.error("Error processing disposal branch:", error);
     }
-    // Adjust role names ("assistant" to "model")
-    const role = msg.role === "assistant" ? "model" : msg.role;
-    return { role, parts };
-  });
+  } else {
+    console.log("Not a disposal-related query or no location provided; skipping disposal lookup.");
+  }
 
-  // If the conversation is long, trim it down (for example, last 10 entries).
+  // Prepare conversation history for Gemini, ensuring non-empty text.
+  const conversationForGemini = chatHistoryDoc.messages
+    .map((msg) => {
+      const text = msg.content.trim();
+      if (!text) return null;
+      const parts = [{ text }];
+      if (msg.imageData) {
+        parts.push({
+          inlineData: { mimeType: "image/jpeg", data: msg.imageData },
+        });
+      }
+      const role = msg.role === "assistant" ? "model" : msg.role;
+      return { role, parts };
+    })
+    .filter((msg) => msg !== null);
+
+  console.log("Final conversation for Gemini (before trimming):", conversationForGemini);
   const MAX_MESSAGES = 20;
   const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
+  console.log("Trimmed conversation for Gemini:", trimmedConversation);
 
   try {
     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
       contents: trimmedConversation,
     });
     const botReply = response.data.candidates[0].content.parts[0].text;
+    console.log("Gemini API reply:", botReply);
 
-    // Append Gemini's response to the history
+    // Append Gemini's response to the chat history
     chatHistoryDoc.messages.push({
       role: "assistant",
       content: botReply,
@@ -333,7 +388,7 @@ async function getGeminiResponse(userId, message, imageBase64) {
     return botReply;
   } catch (error) {
     console.error(
-      "Error:",
+      "Error calling Gemini API:",
       error.response ? error.response.data : error.message
     );
     return "Sorry, something went wrong.";
@@ -342,7 +397,7 @@ async function getGeminiResponse(userId, message, imageBase64) {
 
 // Endpoint for text + image
 app.post("/chat", upload.single("image"), async (req, res) => {
-  const { message, userId } = req.body;
+  const { message, userId, location } = req.body;
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
@@ -355,7 +410,7 @@ app.post("/chat", upload.single("image"), async (req, res) => {
     fs.unlinkSync(imagePath); // Clean up the uploaded file
   }
 
-  const botResponse = await getGeminiResponse(userId, message, imageBase64);
+  const botResponse = await getGeminiResponse(userId, message, imageBase64, location);
   res.json({ reply: botResponse });
 });
 
@@ -367,11 +422,7 @@ app.get("/history/:userId", async (req, res) => {
     if (!chatHistoryDoc) {
       return res.json({ messages: [] });
     }
-    // Filter out the system prompt from the messages array.
-    const filteredMessages = chatHistoryDoc.messages.filter(
-      (msg) => msg.content.trim() !== systemMessage.trim()
-    );
-    res.json({ messages: filteredMessages });
+    res.json({ messages: chatHistoryDoc.messages });
   } catch (error) {
     console.error("Error retrieving history:", error);
     res.status(500).json({ error: "Could not retrieve chat history" });

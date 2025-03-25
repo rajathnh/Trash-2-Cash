@@ -339,6 +339,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import LocationComponent from "./components/LocationComponent";
+import EwasteMap from "./components/EwasteMap";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -346,12 +348,12 @@ function App() {
   const [image, setImage] = useState(null);
   const [userId, setUserId] = useState("");
 
-  // Generate or retrieve userId from local storage
+  // Generate or retrieve userId from localStorage
   useEffect(() => {
     let savedUserId = localStorage.getItem("userId");
     if (!savedUserId) {
-      // Simple unique id generation. You may want to use a UUID library instead.
-      savedUserId = Date.now().toString() + Math.random().toString(36).substring(2);
+      savedUserId =
+        Date.now().toString() + Math.random().toString(36).substring(2);
       localStorage.setItem("userId", savedUserId);
     }
     setUserId(savedUserId);
@@ -364,7 +366,6 @@ function App() {
         .get(`http://localhost:5000/history/${userId}`)
         .then((res) => {
           if (res.data.messages) {
-            // Map backend messages to front-end message format.
             const fetchedMessages = res.data.messages.map((msg) => ({
               sender: msg.role === "assistant" ? "bot" : "user",
               text: msg.content,
@@ -381,8 +382,7 @@ function App() {
 
   const sendMessage = async () => {
     if (!input.trim() && !image) return;
-
-    // Append user's text and image preview to the chat UI
+  
     const newMessages = [...messages];
     if (input.trim()) {
       newMessages.push({ sender: "user", text: input });
@@ -394,37 +394,48 @@ function App() {
       });
     }
     setMessages(newMessages);
-
-    // Prepare form data to send to backend
+  
+    // Retrieve user location from localStorage (if available)
+    const userLocation = localStorage.getItem("userLocation");
+  
     const formData = new FormData();
     formData.append("message", input);
     formData.append("userId", userId);
+    if (userLocation) {
+      formData.append("location", userLocation);
+    }
     if (image) {
       formData.append("image", image);
     }
-
-    // Clear the input and image state
+  
     setInput("");
     setImage(null);
-
+  
     try {
       const response = await axios.post("http://localhost:5000/chat", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setMessages([
-        ...newMessages,
-        { sender: "bot", text: response.data.reply },
-      ]);
+      // Option 1: Append the final reply as you already do.
+      // setMessages([...newMessages, { sender: "bot", text: response.data.reply }]);
+      // Option 2: After receiving a reply, fetch the updated history so you show all messages (including any disposal branch messages).
+      const historyRes = await axios.get(`http://localhost:5000/history/${userId}`);
+      if (historyRes.data.messages) {
+        const updatedMessages = historyRes.data.messages.map((msg) => ({
+          sender: msg.role === "assistant" ? "bot" : "user",
+          text: msg.content,
+          image: msg.imageUrl || null,
+        }));
+        setMessages(updatedMessages);
+      } else {
+        setMessages([...newMessages, { sender: "bot", text: response.data.reply }]);
+      }
     } catch (error) {
       console.error("Error:", error);
-      setMessages([
-        ...newMessages,
-        { sender: "bot", text: "Something went wrong!" },
-      ]);
+      setMessages([...newMessages, { sender: "bot", text: "Something went wrong!" }]);
     }
   };
+  
 
-  // Optionally, clear chat both on frontend and backend local storage
   const clearChat = () => {
     setMessages([]);
     localStorage.removeItem("chatMessages");
@@ -432,6 +443,10 @@ function App() {
 
   return (
     <div className="chat-container">
+      {/* Run geolocation and map queries in the background */}
+      <LocationComponent />
+      <EwasteMap />
+
       <div className="chat-box">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>
