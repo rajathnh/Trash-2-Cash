@@ -27,36 +27,36 @@ router.post("/", async (req, res) => {
 
     let rawResponse, finalResponse;
 
-    // 🖼️ If an image is uploaded, handle it via the image classification controller.
+    // 🖼️ Handle image uploads with image classification controller.
     if (imageFile) {
       console.log("chatRoutes: Detected image upload, forwarding to image classification.");
       return await classifyController.handleImageClassification(userId, imageFile, res);
     }
 
-    // Retrieve recent conversation history (last 10 messages)
+    // Retrieve recent conversation history (last 10 messages) and build context.
     const history = await getChatHistory(userId, 10);
     console.log("chatRoutes: Retrieved chat history:", history);
-
-    let conversationContext = "";
-    history.forEach(msg => {
-      conversationContext += `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}\n`;
-    });
+    const conversationContext = history.reduce((acc, msg) => {
+      const roleLabel = msg.role === "user" ? "User" : "Assistant";
+      return acc + `${roleLabel}: ${msg.content}\n`;
+    }, "");
     console.log("chatRoutes: Conversation Context:", conversationContext);
 
-    // Build a full prompt including context and the new message
+    // Build a full prompt including context and the new message.
     const fullPrompt = `The following is a conversation between a user and an assistant:\n${conversationContext}\nUser: ${message}\nAssistant:`;
     console.log("chatRoutes: Full prompt for Gemini:", fullPrompt);
 
-    // 🔍 Detect intent using just the new message (context may be used later as needed)
+    // 🔍 Detect intent using just the new message.
     console.log("chatRoutes: Calling detectIntent with message:", message);
     const intentData = await detectIntent(message);
     console.log("chatRoutes: Raw intentData:", intentData);
 
-    const { intent, item_name, details, condition } = intentData;
+    // Destructure intent data with defaults.
+    const { intent = "unknown", item_name = "", details = "", condition = "" } = intentData;
     const effectiveDetails = details || item_name;
     console.log("chatRoutes: Detected intent:", intent, "with effectiveDetails:", effectiveDetails);
 
-    // 🎯 Route the request based on intent and get a raw response from the controller
+    // 🎯 Route the request based on the detected intent.
     switch (intent) {
       case "classify_e_waste":
         console.log("chatRoutes: Routing to classifyController for text classification.");
@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
         break;
       case "general_chat":
         console.log("chatRoutes: Routing to generalChatController for general chat.");
-        // For general chat, use the full prompt with context.
+        // Use full prompt with context for general chat.
         rawResponse = await generalChatController.handleChat(userId, fullPrompt);
         break;
       default:
@@ -99,7 +99,7 @@ router.post("/", async (req, res) => {
       finalResponse = rawResponse;
     }
 
-    // 💾 Save both the user message & final assistant response in chat history
+    // 💾 Save the user message and final assistant response to chat history.
     console.log("chatRoutes: Saving user message and final response to chat history.");
     await saveMessage(userId, "user", message);
     await saveMessage(userId, "assistant", finalResponse);

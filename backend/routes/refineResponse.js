@@ -10,22 +10,30 @@ router.post("/", async (req, res) => {
   }
 
   // Create a prompt for refining the raw response.
-  const refinePrompt = `Refine the following message into a friendly, conversational format while preserving all the detailed bullet points. Return the message as plain text with each bullet point on a new line.
+  const refinePrompt = (rawMessage) => `
+ Refine the following message into a friendly, conversational format while preserving all the detailed bullet points. Return the message as plain text with each bullet point on a new line.
   
   Raw message: "${rawMessage}"
   `;
+  
+  
+
 
   try {
     const response = await axios.post(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:generateContent",
-      {
-        contents: [{ role: "user", parts: [{ text: refinePrompt }] }],
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-        params: { key: process.env.GEMINI_API_KEY },
-      }
-    );
+        "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:generateContent",
+        {
+          contents: [
+            { role: "user", parts: [{ text: refinePrompt(rawMessage) }] }
+          ],
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          params: { key: process.env.GEMINI_API_KEY },
+        }
+      );
+      
+      
 
     let generatedText =
       response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
