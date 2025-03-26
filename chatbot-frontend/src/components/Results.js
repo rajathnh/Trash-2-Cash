@@ -7,36 +7,75 @@ const Results = () => {
       <ResultsHeader>
         <ClassifyText>Classify</ClassifyText>
         <ResultsTitle>E-Waste Classification Made Easy</ResultsTitle>
-        <ResultsSubtitle>Discover the fate of your e-waste effortlessly.</ResultsSubtitle>
+        <ResultsSubtitle>
+          Discover the fate of your e-waste effortlessly.
+        </ResultsSubtitle>
       </ResultsHeader>
       <ResultsContent>
-        <ResultCard>
-          <ResultCardTitle>Results</ResultCardTitle>
-          <ResultCardSubtitle>What Can You Do?</ResultCardSubtitle>
-          <ResultCardText>Choose the best option for your e-waste.</ResultCardText>
-          <ResultCardLink href="#">Learn More &gt;</ResultCardLink>
-          <ResultCardImage src="https://via.placeholder.com/300x400" alt="Person with e-waste" />
+        {/* Card 1: Side layout (text left, image right) */}
+        <ResultCard variant="side">
+          <ResultCardContent variant="side">
+            <ResultCardTextWrapper variant="side">
+              <ResultCardTitle>Results</ResultCardTitle>
+              <ResultCardSubtitle>What Can You Do?</ResultCardSubtitle>
+              <ResultCardText>
+                Choose the best option for your e-waste.
+              </ResultCardText>
+              <ResultCardLink href="#">Learn More &gt;</ResultCardLink>
+            </ResultCardTextWrapper>
+            <ResultCardImage
+              variant="side"
+              src="images/r1.jpg"
+              alt="Person with e-waste"
+            />
+          </ResultCardContent>
         </ResultCard>
-        
-        <ResultCard>
-          <ResultCardTitle>Options</ResultCardTitle>
-          <ResultCardSubtitle>Classification Outcomes</ResultCardSubtitle>
-          <ResultCardText>Find out if it's sellable, recyclable, or disposable.</ResultCardText>
-          <ResultCardLink href="#">Explore &gt;</ResultCardLink>
-          <ResultCardImage src="https://via.placeholder.com/300x220" alt="E-waste components" />
+
+        {/* Card 2: Vertical layout (text top, image bottom) */}
+        <ResultCard variant="vertical">
+          <ResultCardContent variant="vertical">
+            <ResultCardTextWrapper variant="vertical">
+              <ResultCardTitle>Options</ResultCardTitle>
+              <ResultCardSubtitle>Classification Outcomes</ResultCardSubtitle>
+              <ResultCardText>
+                Find out if it's sellable, recyclable, or disposable.
+              </ResultCardText>
+              <ResultCardLink href="#">Explore &gt;</ResultCardLink>
+            </ResultCardTextWrapper>
+            <ResultCardImage
+              variant="vertical"
+              src="images/result2.jpg"
+              alt="E-waste components"
+            />
+          </ResultCardContent>
         </ResultCard>
-        
-        <ResultCard>
-          <ResultCardTitle>Guidelines</ResultCardTitle>
-          <ResultCardSubtitle>Safe Disposal</ResultCardSubtitle>
-          <ResultCardText>Follow our steps for proper disposal.</ResultCardText>
-          <ResultCardLink href="#">Get Started &gt;</ResultCardLink>
-          <ResultCardImage src="https://via.placeholder.com/300x220" alt="Safe disposal" />
+
+        {/* Card 3: Vertical layout (text top, image bottom) */}
+        <ResultCard variant="vertical">
+          <ResultCardContent variant="vertical">
+            <ResultCardTextWrapper variant="vertical">
+              <ResultCardTitle>Guidelines</ResultCardTitle>
+              <ResultCardSubtitle>Safe Disposal</ResultCardSubtitle>
+              <ResultCardText>
+                Follow our steps for proper disposal.
+              </ResultCardText>
+              <ResultCardLink href="#">Get Started &gt;</ResultCardLink>
+            </ResultCardTextWrapper>
+            <ResultCardImage
+              variant="vertical"
+              src="images/result3.jpg"
+              alt="Safe disposal"
+            />
+          </ResultCardContent>
         </ResultCard>
       </ResultsContent>
     </ResultsContainer>
   );
 };
+
+export default Results;
+
+/* Styled Components */
 
 const ResultsContainer = styled.section`
   width: 100%;
@@ -62,7 +101,7 @@ const ResultsTitle = styled.h2`
   font-weight: 700;
   color: #2F666F;
   margin-bottom: 15px;
-  
+
   @media (max-width: 768px) {
     font-size: 30px;
   }
@@ -74,7 +113,7 @@ const ResultsSubtitle = styled.p`
   color: #555;
   max-width: 600px;
   margin: 0 auto;
-  
+
   @media (max-width: 768px) {
     font-size: 16px;
   }
@@ -87,35 +126,83 @@ const ResultsContent = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  
+
   @media (max-width: 991px) {
     flex-wrap: wrap;
     justify-content: center;
   }
 `;
 
+/* Each card has a fixed height for a uniform look */
 const ResultCard = styled.div`
   flex: 1;
+  /* Slightly wider side variant (480px), narrower vertical variant (360px) */
+  max-width: ${(props) => (props.variant === 'side' ? '480px' : '360px')};
   min-width: 300px;
-  max-width: 380px;
+  height: 450px;
   border: 1px solid #eee;
   border-radius: 10px;
-  padding: 25px;
-  position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Ensures the image can fill edges without overspill */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   background-color: #fff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+  position: relative;
+  display: flex; 
+  flex-direction: column; 
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
-  
+
   @media (max-width: 991px) {
     margin-bottom: 20px;
   }
 `;
+
+const ResultCardContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: ${(props) => (props.variant === 'side' ? 'row' : 'column')};
+  align-items: stretch;
+`;
+
+const ResultCardTextWrapper = styled.div`
+  padding: ${(props) => (props.variant === 'side' ? '25px' : '25px 25px 0')};
+  /* For side variant, use about half the card width */
+  flex: ${(props) => (props.variant === 'side' ? '0 0 50%' : 'none')};
+  box-sizing: border-box;
+`;
+
+const ResultCardImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the space while maintaining aspect ratio */
+  object-position: center;
+  display: block;
+
+  /* SIDE VARIANT: Fills the entire right half */
+  ${(props) =>
+    props.variant === 'side' &&
+    `
+    flex: 1;
+    height: 100%;
+    width: auto;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  `}
+
+  /* VERTICAL VARIANT: Fully fills the bottom portion */
+  ${(props) =>
+    props.variant === 'vertical' &&
+    `
+    width: 100%;
+    margin-top: auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  `}
+`;
+
 
 const ResultCardTitle = styled.h4`
   font-family: 'Petrona', serif;
@@ -147,17 +234,8 @@ const ResultCardLink = styled.a`
   text-decoration: none;
   display: inline-block;
   margin-bottom: 20px;
-  
+
   &:hover {
     text-decoration: underline;
   }
 `;
-
-const ResultCardImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-`;
-
-export default Results; 

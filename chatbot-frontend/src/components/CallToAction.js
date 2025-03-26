@@ -12,23 +12,16 @@ const CallToAction = () => {
         <CTALeft>
           <CTATitle>Transform Your E-Waste Today</CTATitle>
           <CTADescription>
-            Easily classify your e-waste with our AI tool.
+            Discover if your e-waste is sellable, disposable, or repairable.
+            Learn what to do with it through our AI-powered guidance.
           </CTADescription>
-          <CTAButton primary={true} onClick={() => navigate("/chatbot")}>
+          <Tagline>
+            Find the best solution – sell, dispose, or repair your e-waste.
+          </Tagline>
+          <CTAButton primary onClick={() => navigate("/chatbot")}>
             Upload
           </CTAButton>
         </CTALeft>
-        <CTARight>
-          <CTATitle>Monitor and Classify Your E-Waste</CTATitle>
-          <CTADescription>
-            A one way solution for hassle free monitoring and classifying
-            industrial E-Waste
-          </CTADescription>
-          <CTAButtonGroup>
-            <CTAButton primary={false}>Register as Industry</CTAButton>
-            <CTAButton primary={true}>Log in</CTAButton>
-          </CTAButtonGroup>
-        </CTARight>
       </CTAContent>
     </CTAContainer>
   );
@@ -37,9 +30,8 @@ const CallToAction = () => {
 export default CallToAction;
 
 const CTAContainer = styled.section`
-  /* Constrain the width, set fixed height and center the container */
   max-width: 1210px;
-  height: 320px;
+  height: 400px;
   margin: 40px auto;
   padding: 40px 20px;
   background: linear-gradient(
@@ -56,85 +48,65 @@ const CTAContainer = styled.section`
 
 const CTAContent = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center; /* vertically centers the content */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100%;
-
-  @media (max-width: 991px) {
-    flex-direction: column;
-    gap: 50px;
-    text-align: center;
-  }
+  text-align: center;
 `;
 
 const CTALeft = styled.div`
-  flex: 1;
-  padding-right: 30px;
-
-  @media (max-width: 991px) {
-    padding-right: 0;
-  }
+  max-width: 800px;
 `;
 
-const CTARight = styled.div`
-  flex: 1;
-  padding-left: 30px;
-
-  @media (max-width: 991px) {
-    padding-left: 0;
-  }
+const gradientText = `
+  background: rgb(0, 0, 0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 const CTATitle = styled.h2`
   font-family: "Inria Serif", serif;
-  font-size: 32px;
+  font-size: 40px;
   font-weight: 700;
-  color: #000;
+  ${gradientText}
   margin-bottom: 15px;
 
   @media (max-width: 768px) {
-    font-size: 24px;
+    font-size: 32px;
   }
 `;
 
 const CTADescription = styled.p`
   font-family: "Petrona", serif;
-  font-size: 18px;
-  margin-bottom: 25px;
-  color: #000;
-  max-width: 80%;
-
-  @media (max-width: 991px) {
-    max-width: 100%;
-    margin: 0 auto 25px;
-  }
+  font-size: 22px;
+  ${gradientText}
+  margin-bottom: 20px;
+  max-width: 100%;
 
   @media (max-width: 768px) {
-    font-size: 16px;
+    font-size: 20px;
+  }
+`;
+
+const Tagline = styled.p`
+  font-family: "Petrona", serif;
+  font-size: 20px;
+  font-style: italic;
+  ${gradientText}
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 
 const CTAButton = styled(Button)`
-  font-size: 16px;
-  padding: 10px 24px;
+  font-size: 20px;
+  padding: 14px 32px;
 
   @media (max-width: 768px) {
-    font-size: 14px;
-    padding: 8px 20px;
-  }
-`;
-
-const CTAButtonGroup = styled.div`
-  display: flex;
-  gap: 15px;
-
-  @media (max-width: 991px) {
-    justify-content: center;
-  }
-
-  @media (max-width: 576px) {
-    flex-direction: column;
-    width: 80%;
-    margin: 0 auto;
+    font-size: 18px;
+    padding: 12px 28px;
   }
 `;

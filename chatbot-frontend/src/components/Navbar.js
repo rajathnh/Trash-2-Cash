@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-const Navbar = ({ hideGetStarted }) => {
+const Navbar = ({ hideGetStarted, disableSlide }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [navbarTop, setNavbarTop] = useState("10px");
+  // Set default top value based on disableSlide prop
+  const [navbarTop, setNavbarTop] = useState(disableSlide ? "20px" : "10px");
   const [hasShadow, setHasShadow] = useState(false);
 
   const handleScroll = () => {
+    // Only run if sliding is enabled
+    if (disableSlide) return;
     const currentScrollY = window.pageYOffset;
     const scrollDelta = currentScrollY - lastScrollY;
 
@@ -38,16 +41,22 @@ const Navbar = ({ hideGetStarted }) => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    // Only add scroll listener if sliding is not disabled
+    if (!disableSlide) {
+      window.addEventListener("scroll", handleScroll);
+      setLastScrollY(window.pageYOffset);
+    }
     document.addEventListener("click", handleClickOutside);
     document.addEventListener("keydown", handleEscapeKey);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      if (!disableSlide) {
+        window.removeEventListener("scroll", handleScroll);
+      }
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("keydown", handleEscapeKey);
     };
-  }, [lastScrollY]);
+  }, [lastScrollY, disableSlide]);
 
   return (
     <>
@@ -67,7 +76,6 @@ const Navbar = ({ hideGetStarted }) => {
               {!hideGetStarted && (
                 <GetStartedButton
                   onClick={() => {
-                    // On home page, smooth scroll to "callToAction" section
                     const section = document.getElementById("callToAction");
                     section && section.scrollIntoView({ behavior: "smooth" });
                   }}

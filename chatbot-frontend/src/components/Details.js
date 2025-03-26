@@ -15,7 +15,7 @@ const Details = () => {
           </DetailsDescription>
           <ButtonGroup>
             <Button primary={false}>Learn more</Button>
-            <Button primary={true}>Upload</Button>
+            
           </ButtonGroup>
         </DetailsLeft>
         <DetailsRight>

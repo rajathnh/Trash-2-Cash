@@ -19,7 +19,7 @@ const Content = styled.div`
 function Layout({ children }) {
   return (
     <Container>
-    <Navbar hideGetStarted={true} />
+    <Navbar hideGetStarted={true} disableSlide={true}/>
       <Content>{children}</Content>
       <Footer />
     </Container>
