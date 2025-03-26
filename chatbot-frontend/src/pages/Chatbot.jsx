@@ -24,17 +24,19 @@ function Chatbot() {
   }, []);
 
   // Fetch chat history from backend when userId is set
-  useEffect(() => {
+// In the useEffect where you fetch chat history
+useEffect(() => {
     if (userId) {
       axios
         .get(`http://localhost:5000/history/${userId}`)
         .then((res) => {
           if (res.data.messages) {
-            const fetchedMessages = res.data.messages.map((msg) => ({
-              sender: msg.role === "assistant" ? "bot" : "user",
-              text: msg.content,
-              image: msg.imageUrl || null,
-            }));
+            const fetchedMessages = res.data.messages
+              .map((msg) => ({
+                sender: msg.role === "assistant" ? "bot" : "user",
+                text: msg.content,
+                image: msg.imageUrl || null,
+              }));
             setMessages(fetchedMessages);
           }
         })

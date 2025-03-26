@@ -303,20 +303,35 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
   if (!chatHistoryDoc) {
     chatHistoryDoc = new ChatHistory({
       userId,
-      messages: [{ role: "assistant", content: systemMessage, timestamp: new Date() }],
+      systemMessage: {
+        content: systemMessage,
+        timestamp: new Date()
+      },
+      messages: []
     });
   }
 
+  // Ensure system message exists
+  if (!chatHistoryDoc.systemMessage) {
+    chatHistoryDoc.systemMessage = {
+      content: systemMessage,
+      timestamp: new Date()
+    };
+  }
+
   // Append the user's message
-  const userMessage = { role: "user", content: message, timestamp: new Date() };
+  const userMessage = { 
+    role: "user", 
+    content: message, 
+    timestamp: new Date() 
+  };
   if (imageBase64) {
     userMessage.imageData = imageBase64;
   }
   chatHistoryDoc.messages.push(userMessage);
   console.log("User message appended:", userMessage);
 
-  // Check for disposal-related query.
-  // Only run this branch if a location string is provided.
+  // Check for disposal-related query (if location is provided)
   const disposalKeywords = ["dispose", "disposal", "get rid", "junk"];
   const messageLower = message.toLowerCase();
   const isDisposalQuery = disposalKeywords.some(keyword => messageLower.includes(keyword));
@@ -347,9 +362,21 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
     console.log("Not a disposal-related query or no location provided; skipping disposal lookup.");
   }
 
-  // Prepare conversation history for Gemini, ensuring non-empty text.
-  const conversationForGemini = chatHistoryDoc.messages
-    .map((msg) => {
+  // Prepare conversation history for Gemini
+  const conversationForGemini = [
+    // Prepend system message content to the first user message
+    ...(chatHistoryDoc.messages.length > 0 
+      ? [{
+          role: "user",
+          parts: [
+            { text: chatHistoryDoc.systemMessage.content },
+            { text: chatHistoryDoc.messages[0].content }
+          ]
+        }]
+      : []
+    ),
+    // Add the rest of the messages
+    ...chatHistoryDoc.messages.slice(1).map((msg) => {
       const text = msg.content.trim();
       if (!text) return null;
       const parts = [{ text }];
@@ -358,13 +385,14 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
           inlineData: { mimeType: "image/jpeg", data: msg.imageData },
         });
       }
+      // Use "model" for assistant messages, otherwise keep the role.
       const role = msg.role === "assistant" ? "model" : msg.role;
       return { role, parts };
-    })
-    .filter((msg) => msg !== null);
+    }).filter((msg) => msg !== null)
+  ];
 
   console.log("Final conversation for Gemini (before trimming):", conversationForGemini);
-  const MAX_MESSAGES = 20;
+  const MAX_MESSAGES = 50;
   const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
   console.log("Trimmed conversation for Gemini:", trimmedConversation);
 
@@ -372,20 +400,33 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
       contents: trimmedConversation,
     });
-    const botReply = response.data.candidates[0].content.parts[0].text;
-    console.log("Gemini API reply:", botReply);
+    // Defensive check for response structure
+    if (
+      response.data &&
+      Array.isArray(response.data.candidates) &&
+      response.data.candidates.length > 0 &&
+      response.data.candidates[0].content &&
+      Array.isArray(response.data.candidates[0].content.parts) &&
+      response.data.candidates[0].content.parts.length > 0
+    ) {
+      const botReply = response.data.candidates[0].content.parts[0].text;
+      console.log("Gemini API reply:", botReply);
 
-    // Append Gemini's response to the chat history
-    chatHistoryDoc.messages.push({
-      role: "assistant",
-      content: botReply,
-      timestamp: new Date(),
-    });
+      // Append Gemini's response to the chat history
+      chatHistoryDoc.messages.push({
+        role: "assistant",
+        content: botReply,
+        timestamp: new Date(),
+      });
 
-    // Save the updated chat history
-    await chatHistoryDoc.save();
+      // Save the updated chat history
+      await chatHistoryDoc.save();
 
-    return botReply;
+      return botReply;
+    } else {
+      console.error("Unexpected Gemini API response structure:", response.data);
+      return "Sorry, I couldn't generate a response.";
+    }
   } catch (error) {
     console.error(
       "Error calling Gemini API:",
