@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = ({ hideGetStarted }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [navbarTop, setNavbarTop] = useState('20px');
+  const [navbarTop, setNavbarTop] = useState("10px");
   const [hasShadow, setHasShadow] = useState(false);
 
   const handleScroll = () => {
     const currentScrollY = window.pageYOffset;
     const scrollDelta = currentScrollY - lastScrollY;
 
-    if (scrollDelta > 0) { // Scrolling down
-      setNavbarTop(`${Math.min(20 + (currentScrollY * 0.15), 30)}px`);
-    } else { // Scrolling up
-      setNavbarTop(`${Math.max(20 - (currentScrollY * 0.1), 15)}px`);
+    if (scrollDelta > 0) {
+      // Scrolling down
+      setNavbarTop(`${Math.min(20 + currentScrollY * 0.15, 30)}px`);
+    } else {
+      // Scrolling up
+      setNavbarTop(`${Math.max(20 - currentScrollY * 0.1, 15)}px`);
     }
 
     setHasShadow(currentScrollY > 100);
@@ -23,24 +25,27 @@ const Navbar = ({ hideGetStarted }) => {
   };
 
   const handleClickOutside = (e) => {
-    if (!e.target.closest('#mobile-menu') && !e.target.closest('#mobile-menu-button')) {
+    if (
+      !e.target.closest("#mobile-menu") &&
+      !e.target.closest("#mobile-menu-button")
+    ) {
       setIsMenuOpen(false);
     }
   };
 
   const handleEscapeKey = (e) => {
-    if (e.key === 'Escape') setIsMenuOpen(false);
+    if (e.key === "Escape") setIsMenuOpen(false);
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('keydown', handleEscapeKey);
+    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleEscapeKey);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('keydown', handleEscapeKey);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [lastScrollY]);
 
@@ -72,7 +77,7 @@ const Navbar = ({ hideGetStarted }) => {
               )}
             </DesktopNav>
 
-            <MobileMenuButton 
+            <MobileMenuButton
               id="mobile-menu-button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -82,7 +87,10 @@ const Navbar = ({ hideGetStarted }) => {
         </NavbarContainer>
       </HeaderWrapper>
 
-      <MobileMenuWrapper isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)}>
+      <MobileMenuWrapper
+        isOpen={isMenuOpen}
+        onClick={() => setIsMenuOpen(false)}
+      >
         <MobileMenuContent onClick={(e) => e.stopPropagation()}>
           <MobileNavItem href="/#home">Home</MobileNavItem>
           <MobileNavItem href="/#team">Team</MobileNavItem>
@@ -116,11 +124,20 @@ const HeaderWrapper = styled.header`
 `;
 
 const NavbarContainer = styled.nav`
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: linear-gradient(
+    to right,
+    #d6e1f3,
+    #8a95bf,
+    rgb(111, 199, 231),
+    rgb(73, 150, 164)
+  );
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: ${props => props.hasShadow ? '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)' : 'none'};
+  box-shadow: ${(props) =>
+    props.hasShadow
+      ? "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)"
+      : "none"};
   width: 90%;
   margin: 0 auto;
   border-radius: 12px;
@@ -147,13 +164,13 @@ const Logo = styled.img`
   height: 3.7rem;
   width: 5.7rem;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 `;
 
 const BrandName = styled.span`
-  color: white;
-  font-size: 1.25rem;
+  color: rgb(34, 77, 83);
+  font-size: 1.75rem;
   font-weight: 700;
   display: none;
 
@@ -173,8 +190,9 @@ const DesktopNav = styled.nav`
 `;
 
 const NavItem = styled.a`
-  color: rgba(255, 255, 255, 0.9);
+  color: rgb(34, 77, 83);
   font-weight: 500;
+  font-size: 1.3rem;
   transition: all 0.3s ease;
   position: relative;
   padding-bottom: 0.25rem;
@@ -187,7 +205,7 @@ const NavItem = styled.a`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -200,8 +218,8 @@ const NavItem = styled.a`
 
 const GetStartedButton = styled.button`
   margin-left: 1rem;
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.5);
+  color: rgb(34, 77, 83);
   padding: 0.5rem 1.5rem;
   border: none;
   border-radius: 9999px;
@@ -210,7 +228,7 @@ const GetStartedButton = styled.button`
   backdrop-filter: blur(4px);
 
   &:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
   }
 
   @media (max-width: 768px) {
@@ -243,7 +261,7 @@ const MobileMenuWrapper = styled.div`
   z-index: 50;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
-  display: ${props => (props.isOpen ? 'block' : 'none')};
+  display: ${(props) => (props.isOpen ? "block" : "none")};
 `;
 
 const MobileMenuContent = styled.div`
@@ -254,7 +272,7 @@ const MobileMenuContent = styled.div`
   background: white;
   border-radius: 0.5rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 `;
 
 const MobileNavItem = styled.a`
@@ -273,7 +291,7 @@ const MobileNavItem = styled.a`
 
 const MobileGetStartedButton = styled.button`
   width: 100%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: #1f2937;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -284,8 +302,13 @@ const MobileGetStartedButton = styled.button`
   backdrop-filter: blur(4px);
 
   &:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
   }
 `;
 
-export { MobileMenuWrapper, MobileMenuContent, MobileNavItem, MobileGetStartedButton };
+export {
+  MobileMenuWrapper,
+  MobileMenuContent,
+  MobileNavItem,
+  MobileGetStartedButton,
+};

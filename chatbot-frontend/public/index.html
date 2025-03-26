@@ -11,9 +11,12 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Petrona:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Petrona:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Trash2Cash - E-Waste Classification</title>
   </head>
   <body>
@@ -23,10 +26,6 @@
     <div class="purple"></div>
     <div id="root"></div>
     <!-- Add Google Maps API script here -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmxiOf7JwmysqUQggehosug6BOAhggD_4&libraries=places"
-      async
-      defer
-    ></script>
+    <script src="{process.env.MAPS_API_KEY}" async defer></script>
   </body>
 </html>
