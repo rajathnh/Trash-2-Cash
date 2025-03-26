@@ -214,6 +214,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const forumRoutes = require("./routes/forumRoutes");
+
 const upload = multer({ dest: "uploads/" });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const API_URL =
@@ -473,6 +475,7 @@ app.get("/history/:userId", async (req, res) => {
     res.status(500).json({ error: "Could not retrieve chat history" });
   }
 });
+app.use("/api/forum", forumRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

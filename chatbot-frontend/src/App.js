@@ -342,6 +342,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import "./App.css";
 import Home from './pages/Home';
 import Chatbot from './pages/Chatbot';
+import Forum from './pages/Forum'; // New forum component
 
 function App() {
   return (
@@ -349,9 +350,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chatbot" element={<Chatbot />} />
+        <Route path="/forum" element={<Forum />} /> {/* Forum route */}
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
