@@ -49,14 +49,13 @@ function Chatbot() {
 
 
   // Scroll handling
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
   }, [messages]);
-
+  
   // Message sending
   const sendMessage = async () => {
     if ((!input.trim() && !image) || isLoading) return;
@@ -140,20 +139,19 @@ function Chatbot() {
 
         <ChatWrapper>
           <ChatContent>
-            <MessageContainer>
-              {messages.map((msg, index) => (
-                <MessageBubble key={index} className={msg.sender}>
-                  {msg.image && (
-                    <ImagePreview>
-                      <img src={msg.image} alt="Uploaded content" />
-                    </ImagePreview>
-                  )}
-                  {msg.text && <MessageText>{msg.text}</MessageText>}
-                </MessageBubble>
-              ))}
-              {/* Dummy element removed (or hidden) to avoid extra space */}
-              <div ref={messagesEndRef} style={{ display: "none" }} />
-            </MessageContainer>
+          <MessageContainer ref={messagesEndRef}>
+  {messages.map((msg, index) => (
+    <MessageBubble key={index} className={msg.sender}>
+      {msg.image && (
+        <ImagePreview>
+          <img src={msg.image} alt="Uploaded content" />
+        </ImagePreview>
+      )}
+      {msg.text && <MessageText>{msg.text}</MessageText>}
+    </MessageBubble>
+  ))}
+</MessageContainer>
+
 
             <InputSection>
               <FileInput>
