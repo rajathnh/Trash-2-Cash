@@ -8,6 +8,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f8f9fa;
 `;
 
 const Content = styled.div`
@@ -18,7 +19,7 @@ const Content = styled.div`
 function Layout({ children }) {
   return (
     <Container>
-      <Navbar />
+    <Navbar hideGetStarted={true} />
       <Content>{children}</Content>
       <Footer />
     </Container>
