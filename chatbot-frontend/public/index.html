@@ -25,15 +25,12 @@
     <div class="blue"></div>
     <div class="purple"></div>
     <div id="root"></div>
-    <!-- Add Google Maps API script here
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmxiOf7JwmysqUQggehosug6BOAhggD_4&libraries=places"
-      async
-      defer
-    ></script> -->
 
+    <!-- Google Maps API script inserted dynamically using environment variable -->
     <script>
-      const apiKey = process.env.MAPS_API_KEY;
+      // Note: Use the placeholder %REACT_APP_MAPS_API_KEY% (set in your .env file)
+      const apiKey = "%REACT_APP_MAPS_API_KEY%";
+      console.log(`apiKey: ${apiKey}`);
       const script = document.createElement("script");
       script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
       script.async = true;
