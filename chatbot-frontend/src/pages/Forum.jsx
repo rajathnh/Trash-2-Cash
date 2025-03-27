@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Forum.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Forum = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [image, setImage] = useState(null);
 
-  // Retrieve userId from localStorage (assume it's already set)
-  const userId = localStorage.getItem("userId") || "guest_" + Math.random().toString(36).substring(2, 11);
+  // Retrieve userId from localStorage
+  const userId =
+    localStorage.getItem("userId") ||
+    "guest_" + Math.random().toString(36).substring(2, 11);
 
   // Retrieve or prompt for userName
   let storedUserName = localStorage.getItem("userName");
@@ -22,9 +26,8 @@ const Forum = () => {
     }
   }
   const userName = storedUserName;
-  console.log("User ID:", userId, "User Name:", userName);
 
-  // Fetch all forum messages from the backend
+  // Fetch forum messages from backend
   const fetchMessages = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/forum");
@@ -36,15 +39,13 @@ const Forum = () => {
 
   useEffect(() => {
     fetchMessages();
-  }, []);
-  useEffect(() => {
-    fetchMessages();
     const intervalId = setInterval(() => {
       fetchMessages();
     }, 5000);
     return () => clearInterval(intervalId);
   }, [userId]);
-  // Handle form submission for new forum messages (with image)
+
+  // Handle form submission for new forum messages
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() && !image) return;
@@ -75,49 +76,51 @@ const Forum = () => {
   };
 
   return (
-    <div className="forum-container">
-      <h2>Community Discussion Forum</h2>
-      <div className="forum-messages">
-        {messages.length === 0 ? (
-          <p>No messages yet. Be the first to post!</p>
-        ) : (
-          messages.map((msg) => (
-            <div key={msg._id} className="forum-message">
-              <p className="forum-message-header">
-                <strong>{msg.userName}</strong>{" "}
-                <span className="forum-timestamp">
-                  ({new Date(msg.timestamp).toLocaleString()})
-                </span>
-              </p>
-              <p className="forum-message-content">{msg.message}</p>
-              {msg.imageUrl && (
-                <div className="forum-image">
-                  <img src={msg.imageUrl} alt="Forum upload" />
+    <>
+      <Navbar hideGetStarted={true} disableSlide={true}/>
+      <div className="forum-container">
+        <h2>Community Discussion Forum</h2>
+        <p className="forum-subtitle">
+          Engage with others, share insights, and discuss e-waste management solutions.
+        </p>
+        <div className="forum-messages">
+          {messages.length === 0 ? (
+            <p className="no-messages">No messages yet. Be the first to post!</p>
+          ) : (
+            messages.map((msg) => (
+              <div key={msg._id} className="forum-message">
+                <div className="message-header">
+                  <strong>{msg.userName}</strong>
+                  <span className="forum-timestamp">
+                    {new Date(msg.timestamp).toLocaleString()}
+                  </span>
                 </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-      <form onSubmit={handleSubmit} className="forum-form">
-        <textarea
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message here..."
-          required={!image} // Require text if no image is provided
-        ></textarea>
-        <div className="file-group">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={false}
-          />
-          {image && <span className="file-name">{image.name}</span>}
+                <p className="message-content">{msg.message}</p>
+                {msg.imageUrl && (
+                  <div className="forum-image">
+                    <img src={msg.imageUrl} alt="Forum upload" />
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
-        <button type="submit">Post Message</button>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit} className="forum-form">
+          <textarea
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message here..."
+            required={!image} 
+          ></textarea>
+          <div className="file-group">
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+            {image && <span className="file-name">{image.name}</span>}
+          </div>
+          <button type="submit">Post Message</button>
+        </form>
+      </div>
+      <Footer />
+    </>
   );
 };
 

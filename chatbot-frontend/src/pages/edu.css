@@ -1,0 +1,283 @@
+/* Edu.css */
+:root {
+    --primary-color: #2d7a9f;
+    --secondary-color: #3ab795;
+    --accent-color: #ff914d;
+    --text-dark: #2d3748;
+    --text-light: #4a5568;
+    --bg-light: #f7fafc;
+    --border-color: #e2e8f0;
+    --transition-speed: 0.3s;
+  }
+  
+  .edu-container {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 0 20px;
+  }
+  
+  .edu-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edu-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .edu-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .edu-content-wrapper {
+    margin-top: 2rem;
+  }
+  
+  .edu-category {
+    margin-bottom: 3rem;
+  }
+  
+  .category-title {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .edu-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-speed) ease;
+    min-height: 100px;
+  }
+  
+  .edu-card.active {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-header {
+    width: 100%;
+    padding: 1.25rem;
+    background: var(--bg-light);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color var(--transition-speed) ease;
+  }
+  
+  .card-header:hover {
+    background-color: #edf2f7;
+  }
+  
+  .item-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+  
+  .card-header h3 {
+    margin: 0;
+    flex: 1;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    text-align: left;
+  }
+  
+  .toggle-indicator {
+    font-size: 1rem;
+    margin-left: 1rem;
+    color: var(--text-light);
+    transition: transform var(--transition-speed) ease;
+    display: inline-block;
+    transform-origin: center center;
+  }
+  
+  .edu-card.active .toggle-indicator {
+    transform: rotate(90deg);
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+    animation: slideDown 0.4s ease-out;
+    position: relative;
+  }
+  
+  .content-lead {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+  }
+  
+  .stats-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-item {
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  
+  .subsection-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+  }
+  
+  .subsection-list li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: baseline;
+    color: var(--text-light);
+  }
+  
+  .bullet {
+    color: var(--accent-color);
+    margin-right: 0.75rem;
+  }
+  
+  .steps-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  
+  .step-item {
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .step-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .resources-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .resource-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform var(--transition-speed) ease;
+  }
+  
+  .resource-link:hover {
+    transform: translateX(5px);
+    border-color: var(--primary-color);
+  }
+  
+  .resource-type {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-right: 1rem;
+  }
+  
+  .resource-title {
+    flex: 1;
+  }
+  
+  .external-icon {
+    color: var(--text-light);
+    margin-left: 0.5rem;
+  }
+  
+  .tips-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .tip-item {
+    padding: 0.75rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tip-number {
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-right: 0.75rem;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .edu-container {
+      margin: 80px 15px 30px;
+    }
+    
+    .edu-header h1 {
+      font-size: 2rem;
+    }
+    
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+      padding: 1rem;
+    }
+    
+    .card-content {
+      padding: 1rem;
+    }
+    
+    .edu-card {
+      max-width: 100%;
+    }
+    
+    .steps-grid {
+      grid-template-columns: 1fr;
+    }
+  }
