@@ -203,6 +203,7 @@ const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const multer = require("multer");
+const fileUpload = require("express-fileupload");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -213,7 +214,10 @@ const ChatHistory = require("./models/ChatHistory");
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use(fileUpload({
+  useTempFiles: true, // This creates temporary files for upload, which is useful if you plan to upload to Cloudinary.
+  tempFileDir: '/tmp/', // Optionally specify a temp file directory.
+}));
 const forumRoutes = require("./routes/forumRoutes");
 
 const upload = multer({ dest: "uploads/" });

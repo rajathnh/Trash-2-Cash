@@ -5,6 +5,7 @@ import "./Forum.css";
 const Forum = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [image, setImage] = useState(null);
 
   // Retrieve userId from localStorage (assume it's already set)
   const userId = localStorage.getItem("userId") || "guest_" + Math.random().toString(36).substring(2, 11);
@@ -36,21 +37,40 @@ const Forum = () => {
   useEffect(() => {
     fetchMessages();
   }, []);
-
-  // Handle form submission for new forum messages
+  useEffect(() => {
+    fetchMessages();
+    const intervalId = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, [userId]);
+  // Handle form submission for new forum messages (with image)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() && !image) return;
     try {
-      await axios.post("http://localhost:5000/api/forum", {
-        userId,
-        userName,
-        message: newMessage,
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("userName", userName);
+      formData.append("message", newMessage);
+      if (image) {
+        formData.append("image", image);
+      }
+      await axios.post("http://localhost:5000/api/forum", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       setNewMessage("");
+      setImage(null);
       fetchMessages(); // Refresh messages after posting
     } catch (error) {
       console.error("Error posting forum message:", error);
+    }
+  };
+
+  // Handle file input change
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
   };
 
@@ -70,6 +90,11 @@ const Forum = () => {
                 </span>
               </p>
               <p className="forum-message-content">{msg.message}</p>
+              {msg.imageUrl && (
+                <div className="forum-image">
+                  <img src={msg.imageUrl} alt="Forum upload" />
+                </div>
+              )}
             </div>
           ))
         )}
@@ -79,8 +104,17 @@ const Forum = () => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type your message here..."
-          required
+          required={!image} // Require text if no image is provided
         ></textarea>
+        <div className="file-group">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={false}
+          />
+          {image && <span className="file-name">{image.name}</span>}
+        </div>
         <button type="submit">Post Message</button>
       </form>
     </div>
