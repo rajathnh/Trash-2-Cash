@@ -344,6 +344,7 @@ import Home from './pages/Home';
 import Chatbot from './pages/Chatbot';
 import Forum from './pages/Forum';
 import Edu from './pages/edu';
+import EventsPage from './pages/EventsPage';  // Import the Events page
 
 function App() {
   return (
@@ -353,11 +354,13 @@ function App() {
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/education" element={<Edu />} />
+        <Route path="/events" element={<EventsPage />} />  {/* Add Events route */}
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
 
 

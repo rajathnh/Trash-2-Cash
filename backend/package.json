@@ -33,6 +33,7 @@
         "morgan": "^1.10.0",
         "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.9.16",
+        "puppeteer": "^24.4.0",
         "readline-sync": "^1.4.10",
         "socket.io": "^4.8.1",
         "validator": "^13.6.0",

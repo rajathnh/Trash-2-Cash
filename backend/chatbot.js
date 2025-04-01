@@ -219,7 +219,7 @@ app.use(fileUpload({
   tempFileDir: '/tmp/', // Optionally specify a temp file directory.
 }));
 const forumRoutes = require("./routes/forumRoutes");
-
+const eventRouter = require("./routes/eventRoutes")
 const upload = multer({ dest: "uploads/" });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const API_URL =
@@ -480,6 +480,7 @@ app.get("/history/:userId", async (req, res) => {
   }
 });
 app.use("/api/forum", forumRoutes);
+app.use("/api/event", eventRouter);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
