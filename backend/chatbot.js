@@ -201,7 +201,8 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
-
+const app = express();
+app.use(express.json());
 const multer = require("multer");
 const fileUpload = require("express-fileupload");
 const fs = require("fs");
@@ -232,8 +233,7 @@ app.use(cors({
 // Require the ChatHistory model
 const ChatHistory = require("./models/ChatHistory");
 
-const app = express();
-app.use(express.json());
+
 
 // app.use(fileUpload({
 //   useTempFiles: true, // This creates temporary files for upload, which is useful if you plan to upload to Cloudinary.
