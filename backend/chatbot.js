@@ -296,7 +296,7 @@ async function getNearbyDisposalCenters(userLocation) {
     return [];
   }
 }
-
+app.get("/", (req, res) => res.send("Backend is running!"));
 /**
  * getGeminiResponse:
  * - Retrieves (or creates) a ChatHistory document.
@@ -328,6 +328,7 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
       timestamp: new Date()
     };
   }
+  
 
   // Append the user's message
   const userMessage = { 
