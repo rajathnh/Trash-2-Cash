@@ -201,19 +201,40 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
-const cors = require("cors");
+
 const multer = require("multer");
 const fileUpload = require("express-fileupload");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+const cors = require('cors');
+const allowedOrigins = [
+  'http://localhost:3000',   // Local frontend
+  'http://localhost:5000',   // Local backend (if needed for testing)
+  'https://trash-2-cash.vercel.app', // Vercel frontend
+  'https://trash-2-cash-299208236479.asia-south1.run.app' // Vercel backend
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('CORS policy: Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Require the ChatHistory model
 const ChatHistory = require("./models/ChatHistory");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
 // app.use(fileUpload({
 //   useTempFiles: true, // This creates temporary files for upload, which is useful if you plan to upload to Cloudinary.
 //   tempFileDir: '/tmp/', // Optionally specify a temp file directory.
