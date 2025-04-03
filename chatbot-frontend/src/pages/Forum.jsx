@@ -4,6 +4,9 @@ import "./Forum.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Forum = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -30,7 +33,7 @@ const Forum = () => {
   // Fetch forum messages from backend
   const fetchMessages = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/forum");
+      const response = await axios.get(`${BACKEND_URL}/api/forum`);
       setMessages(response.data.messages);
     } catch (error) {
       console.error("Error fetching forum messages:", error);
@@ -57,7 +60,7 @@ const Forum = () => {
       if (image) {
         formData.append("image", image);
       }
-      await axios.post("http://localhost:5000/api/forum", formData, {
+      await axios.post(`${BACKEND_URL}/api/forum`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setNewMessage("");

@@ -403,7 +403,7 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
   ];
 
   console.log("Final conversation for Gemini (before trimming):", conversationForGemini);
-  const MAX_MESSAGES = 50;
+  const MAX_MESSAGES = 10;
   const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
   console.log("Trimmed conversation for Gemini:", trimmedConversation);
 

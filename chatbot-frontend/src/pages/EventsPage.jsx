@@ -4,6 +4,9 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaCalendarAlt, FaMapMarkerAlt, FaLeaf, FaRegClock, FaUsers } from 'react-icons/fa';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+
 const EventsPage = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,7 +15,7 @@ const EventsPage = () => {
     useEffect(() => {
       const fetchEvents = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/event'); // Update with your actual backend URL
+          const response = await fetch(`${BACKEND_URL}/api/event`); // Update with your actual backend URL
           if (!response.ok) {
             throw new Error('Failed to fetch events');
           }

@@ -15,6 +15,7 @@ function Chatbot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   // User ID management
   useEffect(() => {
     let savedUserId = localStorage.getItem("userId");
@@ -31,7 +32,7 @@ function Chatbot() {
   useEffect(() => {
     if (userId) {
       axios
-        .get(`http://localhost:5000/history/${userId}`)
+        .get(`${BACKEND_URL}/history/${userId}`)
         .then((res) => {
           if (res.data.messages) {
             const fetchedMessages = res.data.messages
@@ -82,7 +83,7 @@ function Chatbot() {
       if (userLocation) formData.append("location", userLocation);
       if (image) formData.append("image", image);
 
-      const response = await axios.post("http://localhost:5000/chat", formData, {
+      const response = await axios.post(`${BACKEND_URL}/chat`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -115,7 +116,7 @@ function Chatbot() {
     if (confirmClear) {
       try {
         await axios.post(
-          `http://localhost:5000/clear-history`,
+          `${BACKEND_URL}/clear-history`,
           { userId },
           { headers: { "Content-Type": "application/json" } }
         );
