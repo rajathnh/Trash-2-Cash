@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-const Navbar = ({ hideGetStarted, disableSlide }) => {
+const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   // Set default top value based on disableSlide prop
@@ -70,6 +70,7 @@ const Navbar = ({ hideGetStarted, disableSlide }) => {
 
             <DesktopNav>
               <NavItem href="/#home">Home</NavItem>
+              {!hideEvents && <NavItem href="/events">Events</NavItem>}
               <NavItem href="/#team">Team</NavItem>
               <NavItem href="/#testimonials">Testimonials</NavItem>
               <NavItem href="/#faqs">Contact</NavItem>
@@ -101,6 +102,7 @@ const Navbar = ({ hideGetStarted, disableSlide }) => {
       >
         <MobileMenuContent onClick={(e) => e.stopPropagation()}>
           <MobileNavItem href="/#home">Home</MobileNavItem>
+          {!hideEvents && <MobileNavItem href="/#details">Events</MobileNavItem>} 
           <MobileNavItem href="/#team">Team</MobileNavItem>
           <MobileNavItem href="/#testimonial">Testimonials</MobileNavItem>
           <MobileNavItem href="/#faqs">FAQs</MobileNavItem>
@@ -200,7 +202,7 @@ const DesktopNav = styled.nav`
 const NavItem = styled.a`
   color: rgb(34, 77, 83);
   font-weight: 500;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
   position: relative;
   padding-bottom: 0.25rem;

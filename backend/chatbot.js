@@ -214,10 +214,10 @@ const ChatHistory = require("./models/ChatHistory");
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(fileUpload({
-  useTempFiles: true, // This creates temporary files for upload, which is useful if you plan to upload to Cloudinary.
-  tempFileDir: '/tmp/', // Optionally specify a temp file directory.
-}));
+// app.use(fileUpload({
+//   useTempFiles: true, // This creates temporary files for upload, which is useful if you plan to upload to Cloudinary.
+//   tempFileDir: '/tmp/', // Optionally specify a temp file directory.
+// }));
 const forumRoutes = require("./routes/forumRoutes");
 const eventRouter = require("./routes/eventRoutes")
 const upload = multer({ dest: "uploads/" });

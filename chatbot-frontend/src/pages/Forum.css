@@ -1,6 +1,6 @@
 /* Ensure the forum container starts below the navbar */
 .forum-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 120px auto 40px auto; /* Increased top margin to prevent overlap with Navbar */
     padding: 30px;
     background-color: #fff;

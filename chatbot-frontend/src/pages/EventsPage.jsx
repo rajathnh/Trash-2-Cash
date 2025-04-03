@@ -1,48 +1,110 @@
 import React, { useEffect, useState } from 'react';
 import './EventsPage.css';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { FaCalendarAlt, FaMapMarkerAlt, FaLeaf, FaRegClock, FaUsers } from 'react-icons/fa';
+
 const EventsPage = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+  
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/event'); // Update with your actual backend URL
-                if (!response.ok) {
-                    throw new Error('Failed to fetch events');
-                }
-                const data = await response.json();
-                setEvents(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchEvents();
+      const fetchEvents = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/event'); // Update with your actual backend URL
+          if (!response.ok) {
+            throw new Error('Failed to fetch events');
+          }
+          const data = await response.json();
+          setEvents(data);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchEvents();
     }, []);
-
+  
     if (loading) return <p>Loading events...</p>;
     if (error) return <p>Error: {error}</p>;
 
-    return (
-        <div className="events-container">
-            <h2>Upcoming Waste Management Events</h2>
-            <ul>
-                {events.map(event => (
-                    <li key={event._id}>
-                        <h3>{event.eventName}</h3>
-                        <p><strong>Date:</strong> {event.eventDate}</p>
-                        <p><strong>Location:</strong> {event.location}</p>
-                        <p><strong>Description:</strong> {event.description}</p>
-                        <a href={event.eventLink} target="_blank" rel="noopener noreferrer">View Details</a>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
+  const formatEventDate = (dateString) => {
+    if (!dateString) return 'Date to be announced';
+    const date = new Date(dateString);
+    return isNaN(date) ? 'Date to be announced' : 
+      date.toLocaleDateString('en-US', {
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+  };
 
+  return (
+    <>
+      <Navbar hideGetStarted={true} disableSlide={true} />
+      <div className="events-page">
+        <div className="events-container">
+          <div className="events-header">
+            <h1 className="events-main-title">Eco Events Hub</h1>
+            <p className="events-subtitle">Sustainable Waste Management Initiatives</p>
+          </div>
+          
+          <div className="events-content">
+            {events.map((event) => (
+              <article key={event._id} className="event-card">
+                <div className="event-card-header">
+                  <div className="event-type">
+                    <FaLeaf className="event-type-icon" />
+                    <span className="event-status">Upcoming</span>
+                  </div>
+                  <div className="event-meta">
+                    <span className="event-participants">
+                      <FaUsers className="meta-icon" />
+                      {event.participants || '100+'} participants
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="event-card-body">
+                  <h3 className="event-title">{event.eventName}</h3>
+                  <div className="event-details">
+                    <div className="detail-item">
+                      <FaCalendarAlt className="detail-icon" />
+                      <span>{formatEventDate(event.eventDate)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <FaMapMarkerAlt className="detail-icon" />
+                      <span>{event.location || 'Virtual Event'}</span>
+                    </div>
+                  </div>
+                  <p className="event-description">
+                    {event.description || 'Join us for an impactful waste management initiative. Details coming soon!'}
+                  </p>
+                </div>
+                
+                <div className="event-card-footer">
+                  <a
+                    href={event.eventLink || '#'}
+                    className="event-cta"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {event.eventLink ? 'Register Now' : 'Learn More'}
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+};
 export default EventsPage;

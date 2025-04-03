@@ -1,26 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom'; // Import navigation hook
 import Button from './Button';
 
 const Details = () => {
+  const navigate = useNavigate(); // Hook to handle navigation
+
   return (
     <DetailsContainer>
       <DetailsContent>
         <DetailsLeft>
           <DetailsTitle>
-            Revolutionizing E-Waste Management with AI
+            Transforming E-Waste Management with Smart Solutions & Community Engagement
           </DetailsTitle>
           <DetailsDescription>
-            Our AI classification process quickly analyzes your e-waste images, determining whether items are sellable, recyclable, or disposable. This innovative solution not only simplifies e-waste management but also promotes sustainable practices.
+            Our advanced AI technology optimizes your e-waste recycling process, maximizing resource recovery while minimizing environmental impact. Discover industry insights and connect with experts at our exclusive community events—all designed to empower a greener future.
           </DetailsDescription>
           <ButtonGroup>
-            <Button primary={false}>Learn more</Button>
-            
+            <Button primary={false}>Learn More</Button>
+            <Button primary={true} onClick={() => navigate('/events')}>Explore Events</Button> {/* Navigate to EventsPage */}
           </ButtonGroup>
         </DetailsLeft>
         <DetailsRight>
           <DetailsImageContainer>
-            <DetailsImage src="images/detail.jpg" alt="E-waste management" />
+            <DetailsImage src="images/detail.jpg" alt="E-waste management process" />
           </DetailsImageContainer>
         </DetailsRight>
       </DetailsContent>
@@ -33,8 +36,6 @@ export default Details;
 const DetailsContainer = styled.section`
   width: 100%;
   padding: 80px 20px;
-  /* Gradient starting with a darker shade matching hero's dark gradient (#2F666F) at the top */
- 
 `;
 
 const DetailsContent = styled.div`
