@@ -6,10 +6,9 @@ const Results = () => {
   const navigate = useNavigate();
 
   const handleJoinForum = () => {
-    const username = prompt("Please enter your username:");
-    if (username) {
+    
       navigate("/forum");
-    }
+    
   };
 
   const handleEducation = () => {
