@@ -345,6 +345,7 @@
 .resource-type.guide { background: var(--accent-color); color: var(--text-dark); }
 .resource-type.documentary { background: var(--secondary-color); }
 .resource-type.analysis { background: rgb(213, 194, 49); }
+.resource-type.who-report { background: rgb(49, 79, 213); }
 .resource-type.tutorial { background: #2A9D8F; }
 .resource-type.case-study { background: #E76F51; }
 .resource-type.innovation { background: #9C27B0; }
@@ -434,4 +435,33 @@
   .card-content {
     display: block !important;
   }
+}
+/* Remove these */
+.infographic-image {
+  max-width: 100%;
+  height: auto;
+  margin-right:1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Keep these for the button */
+.infographic-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.infographic-link {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.5rem 1.2rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.infographic-link:hover {
+  transform: translateY(-2px);
 }

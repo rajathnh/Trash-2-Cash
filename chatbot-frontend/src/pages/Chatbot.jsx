@@ -215,7 +215,7 @@ const ChatHeader = styled.h1`
   background: linear-gradient(to right, #2563eb, #9333ea);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 0 auto 1rem; /* Adjusted margin to remove extra space */
+  margin: 50 auto 1rem; /* Adjusted margin to remove extra space */
 `;
 
 const LocationSection = styled.div`
