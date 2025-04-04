@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+console.log(BACKEND_URL)
 
 const Forum = () => {
   const [messages, setMessages] = useState([]);

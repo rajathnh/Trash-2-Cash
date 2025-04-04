@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { FaCalendarAlt, FaMapMarkerAlt, FaLeaf, FaRegClock, FaUsers } from 'react-icons/fa';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+console.log(BACKEND_URL)
 
 
 const EventsPage = () => {

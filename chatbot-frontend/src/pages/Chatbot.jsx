@@ -16,6 +16,7 @@ function Chatbot() {
   const messagesEndRef = useRef(null);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  console.log(BACKEND_URL)
   // User ID management
   useEffect(() => {
     let savedUserId = localStorage.getItem("userId");
