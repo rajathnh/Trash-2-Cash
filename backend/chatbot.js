@@ -349,7 +349,6 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
       timestamp: new Date()
     };
   }
-  
 
   // Append the user's message
   const userMessage = { 
@@ -390,48 +389,99 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
     } catch (error) {
       console.error("Error processing disposal branch:", error);
     }
-  } else {
-    console.log("Not a disposal-related query or no location provided; skipping disposal lookup.");
   }
 
+  // Determine if we need to refresh the system prompt
+  // We'll refresh every 10 messages (counting from 0)
+  const messageCount = chatHistoryDoc.messages.length;
+  const shouldRefreshSystemPrompt = (messageCount - 1) % 10 === 0;
+  console.log(`Message count: ${messageCount}, Refreshing system prompt: ${shouldRefreshSystemPrompt}`);
+
+  // Get recent messages (limited to 20 for API constraints)
+  const MAX_MESSAGES = 20;
+  const recentMessages = chatHistoryDoc.messages.slice(-MAX_MESSAGES);
+
   // Prepare conversation history for Gemini
-  const conversationForGemini = [
-    // Prepend system message content to the first user message
-    ...(chatHistoryDoc.messages.length > 0 
-      ? [{
-          role: "user",
-          parts: [
-            { text: chatHistoryDoc.systemMessage.content },
-            { text: chatHistoryDoc.messages[0].content }
-          ]
-        }]
-      : []
-    ),
-    // Add the rest of the messages
-    ...chatHistoryDoc.messages.slice(1).map((msg) => {
-      const text = msg.content.trim();
-      if (!text) return null;
-      const parts = [{ text }];
-      if (msg.imageData) {
-        parts.push({
-          inlineData: { mimeType: "image/jpeg", data: msg.imageData },
+  let conversationForGemini = [];
+
+  // First message is special - it needs to include the system prompt
+  if (recentMessages.length > 0) {
+    // Always include system prompt with the first user message in our conversation window
+    const firstUserMsgIndex = recentMessages.findIndex(msg => msg.role === "user");
+    
+    if (firstUserMsgIndex !== -1) {
+      const firstUserMsg = recentMessages[firstUserMsgIndex];
+      
+      // For the first message in our window, include the system prompt
+      conversationForGemini.push({
+        role: "user",
+        parts: [
+          { text: chatHistoryDoc.systemMessage.content },
+          { text: firstUserMsg.content }
+        ]
+      });
+      
+      // Add image data if present
+      if (firstUserMsg.imageData) {
+        conversationForGemini[0].parts.push({
+          inlineData: { mimeType: "image/jpeg", data: firstUserMsg.imageData }
         });
       }
-      // Use "model" for assistant messages, otherwise keep the role.
-      const role = msg.role === "assistant" ? "model" : msg.role;
-      return { role, parts };
-    }).filter((msg) => msg !== null)
-  ];
+      
+      // Add the remaining messages
+      for (let i = 0; i < recentMessages.length; i++) {
+        // Skip the first user message we already added
+        if (i === firstUserMsgIndex) continue;
+        
+        const msg = recentMessages[i];
+        const parts = [{ text: msg.content.trim() }];
+        
+        // Add image if present
+        if (msg.imageData) {
+          parts.push({
+            inlineData: { mimeType: "image/jpeg", data: msg.imageData }
+          });
+        }
+        
+        // Use "model" for assistant messages
+        const role = msg.role === "assistant" ? "model" : msg.role;
+        conversationForGemini.push({ role, parts });
+      }
+    }
+  }
 
-  console.log("Final conversation for Gemini (before trimming):", conversationForGemini);
-  const MAX_MESSAGES = 10;
-  const trimmedConversation = conversationForGemini.slice(-MAX_MESSAGES);
-  console.log("Trimmed conversation for Gemini:", trimmedConversation);
+  // If we need to refresh the system prompt and it's not the first message
+  if (shouldRefreshSystemPrompt && messageCount > 1) {
+    // Insert a "hidden" system prompt message before the latest user message
+    const systemPromptRefresh = {
+      role: "user",
+      parts: [{ text: chatHistoryDoc.systemMessage.content }]
+    };
+    
+    // Find the index of the last user message
+    const lastUserMsgIndex = conversationForGemini.length - 1;
+    
+    // Insert the system refresh right before the latest user message
+    // This keeps the conversation flow natural but reminds the AI of its role
+    conversationForGemini.splice(lastUserMsgIndex, 0, systemPromptRefresh);
+    
+    console.log("System prompt refreshed at message count:", messageCount);
+  }
+
+  // Filter out any null messages and ensure we're within limits
+  conversationForGemini = conversationForGemini
+    .filter(msg => msg !== null && msg.parts.some(part => part.text?.trim()))
+    .slice(-MAX_MESSAGES);
+
+  console.log("Final conversation for Gemini:", 
+    conversationForGemini.map(m => ({ role: m.role, contentLength: m.parts.map(p => p.text || "[image]").join("").length }))
+  );
 
   try {
     const response = await axios.post(`${API_URL}?key=${GEMINI_API_KEY}`, {
-      contents: trimmedConversation,
+      contents: conversationForGemini,
     });
+    
     // Defensive check for response structure
     if (
       response.data &&
