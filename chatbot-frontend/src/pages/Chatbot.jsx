@@ -132,10 +132,10 @@ function Chatbot() {
   return (
     <Layout>
       <ChatContainer>
-        {/* <LocationSection>
+        <LocationSection>
           <LocationComponent />
           <EwasteMap compact={true} />
-        </LocationSection> */}
+        </LocationSection>
 
         <ChatHeader>EcoBuddy Chat</ChatHeader>
 
