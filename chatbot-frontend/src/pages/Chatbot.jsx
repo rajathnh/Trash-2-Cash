@@ -283,14 +283,12 @@ const ChatHeader = styled.header`
 `;
 const LocationSection = styled.div`
   background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem; /* Added margin-bottom to control spacing */
+  padding: 0rem;
+  margin-bottom: 0rem;
   > div {
-    height: 280px;
+    height: 0px;
     @media (max-width: 768px) {
-      height: 200px;
+      height: 0px;
     }
   }
 `;
