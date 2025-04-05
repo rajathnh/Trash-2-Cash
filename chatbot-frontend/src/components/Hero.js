@@ -28,7 +28,7 @@ const Hero = () => {
             </HeroDescription>
             <ButtonGroup>
               <Button primary={true} onClick={() => navigate('/chatbot')}>
-                Upload
+              Start EcoBuddy Chat
               </Button>
               <Button primary={false} onClick={handleEducation}>Learn more</Button>
             </ButtonGroup>

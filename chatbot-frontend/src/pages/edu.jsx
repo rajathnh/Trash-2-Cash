@@ -1,3 +1,5 @@
+
+
 // src/pages/Edu.jsx
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
@@ -12,7 +14,7 @@ const sections = [
         title: "What is E-Waste?",
         icon: "🌍",
         content:
-          "Imagine e-waste as the leftovers of our digital lives—old phones, laptops, and batteries that are no longer useful. They hide valuable metals like gold, yet also harmful toxins. Instead of tossing them carelessly, give them a proper send-off through recycling. It’s a smart way to recover treasures and protect our planet, ensuring a cleaner future for everyone.\n\nAdditional Info: E-waste recycling not only prevents toxic chemicals from polluting our environment but also supports a circular economy by reclaiming rare resources.",
+          "Electronic waste includes discarded electrical/electronic devices. Proper management is crucial for environmental protection.",
         stats: [
           "📱 53.6M tons generated globally (2024)",
           "📈 Growing 5x faster than recycling",
@@ -21,7 +23,7 @@ const sections = [
         ],
         source: "UN Global E-Waste Monitor 2024",
         infographic: "/images/ewaste-global.png",
-        video: "/videos/imprecy.mp4"
+        video: "/videos/motivating.mp4"
       },
       {
         title: "Why Minimize E-Waste?",
@@ -36,6 +38,13 @@ const sections = [
           "5. Carbon Footprint Reduction",
         ],
         source: "Various Environmental Reports",
+        visualization: {
+          type: "comparisonChart",
+          data: [
+            { label: "Generated", value: 80, color: "var(--danger-color)" },
+            { label: "Recycled", value: 20, color: "var(--primary-color)" },
+          ]
+        }
       },
     ],
   },
@@ -70,7 +79,7 @@ const sections = [
     ],
   },
   {
-    category: "Actionable Solutions",
+    category: "Moving forward..",
     items: [
       {
         title: "5-Step Reduction Plan",
@@ -111,7 +120,7 @@ const sections = [
         ],
         video: "/videos/whattodo.mp4"
       },
-      {
+      {  
         title: "Recycling Process",
         icon: "♻️",
         content:
@@ -123,6 +132,7 @@ const sections = [
           "4. Material Recovery",
           "5. Hazard Treatment",
         ],
+        video: "/videos/imprecy.mp4"
       },
     ],
   },
@@ -161,7 +171,7 @@ const sections = [
         title: "Watch and Learn",
         icon: "🎥",
         content:
-          "Watch EcoBuddy videos that explain e-waste challenges and recycling solutions in an engaging, easy-to-understand manner.",
+          "Here are some of the videos that might help you more: ",
         resources: [
           {
             type: "Documentary",
@@ -182,49 +192,77 @@ const sections = [
       },
     ],
   },
+// Update the Hazardous E-Waste section in the sections array
+{
+  category: "Hazardous E-Waste",
+  items: [
+    {
+      title: "Handling Hazardous E-Waste: Do It Right!",
+      icon: "⚠️",
+      cards: [
+        {
+          title: "Why Hazardous E-Waste is a Big Deal",
+          icon: "🌍",
+          content: [
+            "Many electronic devices contain harmful substances like lead, mercury, cadmium",
+            "Improper disposal leads to soil, water, and air pollution",
+            "Direct health risks: Neurotoxicity, cancer, organ damage"
+          ]
+        },
+        {
+          title: "Identifying Hazardous E-Waste",
+          icon: "🔍",
+          content: [
+            "- Batteries (lithium-ion, lead-acid)",
+            "- CRT Monitors & TVs (lead/phosphorus content)",
+            "- Fluorescent Bulbs (mercury vapor)",
+            "- Printed Circuit Boards (heavy metals)",
+            "- Refrigerators/ACs (ozone-depleting refrigerants)"
+          ]
+        },
+        {
+          title: "Safe Handling Guidelines",
+          icon: "🧤",
+          content: [
+            "🚫 Never mix with regular trash",
+            "📦 Use certified collection centers",
+            "🏭 Check manufacturer take-back programs",
+            "👶 Store safely away from children/pets",
+            "📅 Dispose within 90 days of collection"
+          ]
+        }
+      ],
+      source: "EPA & WHO Guidelines 2024"
+    }
+  ]
+},
   {
-    category: "Hazardous E-Waste",
+    category: "Global Regulations",
     items: [
       {
-        title: "Handling Hazardous E-Waste: Do It Right!",
-        icon: "🗑️",
-        content:
-          "Proper handling of hazardous e-waste is critical to prevent environmental pollution and protect human health. Follow these guidelines to safely manage hazardous components:",
-        subsections: [
-          "**Why Hazardous E-Waste is a Big Deal**",
-          "- Contains harmful substances like lead, mercury, and cadmium.",
-          "- Improper disposal leads to soil, water, and air pollution.",
-          "**Identifying Hazardous E-Waste**",
-          "- Batteries, CRT monitors, fluorescent bulbs, PCBs, and more.",
-          "**Safe Handling Guidelines**",
-          "- Do not mix with regular trash.",
-          "- Use designated collection centers.",
-          "- Check manufacturer take-back programs.",
-        ],
-        source: "EPA Guidelines on E-Waste",
-        infographic: "/images/hazard-analysis.png",
-        video: "/videos/whydanger.mp4"
-      },
-      {
-        title: "Watch and Learn: Handling Hazardous Materials",
-        icon: "🎥",
-        content:
-          "Explore our dedicated video guide on safely handling hazardous e-waste. This section includes expert tips and innovative insights into best practices.",
-        resources: [
+        title: "Country-Specific Rules",
+        icon: "🌐",
+        countries: [
           {
-            type: "Tutorial",
-            title: "Safe Disposal Techniques",
-            link: "https://youtu.be/-uyIzKIw0xY?si=Dk_fcoVhNgh_Fqos",
+            name: "🇺🇸 USA",
+            regulation: "RCRA mandates proper CRT monitor recycling",
+            link: "https://www.epa.gov/recycle/electronics-donation-and-recycling"
           },
           {
-            type: "AI Insight",
-            title: "Hazardous E-Waste: An AI Perspective",
-            link: "https://youtu.be/your-ai-video-link-3",
+            name: "🇪🇺 EU",
+            regulation: "WEEE Directive holds producers responsible",
+            link: "https://ec.europa.eu/environment/topics/waste-and-recycling/rohs-directive_en"
           },
-        ],
-      },
-    ],
+          {
+            name: "🇮🇳 India",
+            regulation: "EWM Rules 2022 require manufacturer take-back",
+            link: "https://cpcb.nic.in/e-waste-management/"
+          },
+        ]
+      }
+    ]
   },
+
   {
     category: "Want to Know More?",
     items: [
@@ -270,7 +308,7 @@ const sections = [
             link: "https://lohum.com/media/blog/e-waste-crisis-why-we-should-care-and-what-we-can-do",
           },
         ],
-        video: "/videos/motivating.mp4"
+        
       },
     ],
   },
@@ -349,16 +387,44 @@ const Edu = () => {
                             </div>
                           )}
 
-                          {item.subsections && (
-                            <ul className="subsection-list">
-                              {item.subsections.map((sub, i) => (
-                                <li key={`sub-${i}`} className="hazard-item">
-                                  <span className="bullet">•</span>
-                                  {sub}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+{item.cards && (
+  <div className="hazard-cards-grid">
+    {item.cards.map((card, cardIndex) => (
+      <div key={`hazard-card-${cardIndex}`} className="hazard-card">
+        <div className="hazard-card-header">
+          <span className="hazard-card-icon">{card.icon}</span>
+          <h4>{card.title}</h4>
+        </div>
+        <ul className="hazard-content-list">
+          {card.content.map((point, pointIndex) => (
+            <li key={`point-${pointIndex}`} className="hazard-point">
+              {point}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+)}
+
+{item.source && (
+  <div className="hazard-source">
+    Source: {item.source}
+  </div>
+)}
+                       
+                         {item.subsections &&
+                           typeof item.subsections[0] === "string" && (
+                             <ul className="subsection-list">
+                               {item.subsections.map((sub, i) => (
+                                 <li key={i} className="hazard-item">
+                                   <span className="bullet">•</span>
+                                   {sub}
+                                 </li>
+                               ))}
+                             </ul>
+                         )}
+                         
 
                           {item.steps && (
                             <div className="steps-grid">
@@ -406,8 +472,25 @@ const Edu = () => {
                               ))}
                             </div>
                           )}
-
-                          {/* Improved Video Section */}
+                           {item.countries && (
+                             <div className="country-grid">
+                               {item.countries.map((country, i) => (
+                                 <a
+                                   key={`country-${i}`}
+                                   href={country.link}
+                                   className="country-card"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                 >
+                                   <span className="country-flag">{country.name.split(" ")[0]}</span>
+                                   <div>
+                                     <h4>{country.name.split(" ")[1]}</h4>
+                                     <p>{country.regulation}</p>
+                                   </div>
+                                 </a>
+                               ))}
+                             </div>
+                           )}
                           {item.video && (
                             <div className="video-section">
                               <h4 className="video-title">Watch & Learn</h4>
@@ -435,3 +518,4 @@ const Edu = () => {
 };
 
 export default Edu;
+

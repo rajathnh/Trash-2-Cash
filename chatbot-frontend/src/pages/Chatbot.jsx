@@ -139,7 +139,7 @@ function Chatbot() {
         </LocationSection>
         <ChatHeader>
           <h1>EcoBuddy Chat</h1>
-          <p>Your Sustainable Companion</p>
+          <p>Your Sustainability Companion</p>
         </ChatHeader>
 
         <ChatWrapper>
@@ -231,7 +231,7 @@ const ChatContainer = styled.div`
   grid-template-rows: auto 1fr;
   height: calc(100vh - 80px);
   background: white;
-  padding: 1.5rem;
+  padding: 0.5rem 1.5rem;
   gap: 1rem;
 
   @media (max-width: 1024px) {
@@ -249,13 +249,14 @@ const ChatContainer = styled.div`
 
 const ChatHeader = styled.header`
   text-align: center;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  border-radius: 16px;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgb(79, 164, 175), 0%, #302b63 50%, #24243e 100%);
+  border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: -40px auto 1.5rem;
-  width: 100%;
+  margin: 0 auto 0.5rem;
+  width: 50%;
   max-width: 1280px;
+  height: 100px;
 
   h1 {
     font-size: 2rem;
@@ -281,6 +282,9 @@ const ChatHeader = styled.header`
     }
   }
 `;
+
+
+
 const LocationSection = styled.div`
   background: white;
   padding: 0rem;
@@ -303,6 +307,7 @@ const ChatWrapper = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
+  height: 500px;
   border: 2px solid rgb(144, 107, 255); /* Contrast border */
 
   @media (max-width: 1024px) {
@@ -606,7 +611,7 @@ const Spinner = styled.div`
 `;
 
 export const NavbarSpacer = styled.div`
-  height: 90px;
+  height: 60px;
   background: white;
 
   @media (max-width: 768px) {

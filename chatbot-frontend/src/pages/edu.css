@@ -164,7 +164,7 @@
 }
 
 .card-header:hover {
-  background: rgba(255,255,255,0.95);
+  background: rgba(199, 226, 232, 0.95);
 }
 
 .card-header h3 {
@@ -557,4 +557,203 @@
   .card-content {
     display: block !important;
   }
+}
+
+/* Data Visualization Elements */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-color);
+}
+
+.compare-chart {
+  display: flex;
+  height: 200px;
+  margin: 2rem 0;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.chart-bar {
+  width: 23%;
+  background: var(--primary-color);
+  position: relative;
+  transition: height 0.5s ease;
+}
+
+.chart-bar::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* Increase base card content font size */
+.card-content {
+  font-size: 1.15rem; /* Increased from default 1rem */
+  line-height: 1.7; /* Better readability */
+}
+
+/* Adjust specific content elements */
+.content-lead {
+  font-size: 1.25rem !important;
+  line-height: 1.8;
+}
+
+.step-detail,
+.subsection-list li,
+.stat-item {
+  font-size: 1.1rem;
+}
+
+/* Resources section text */
+.resource-title {
+  font-size: 1.1rem;
+}
+
+/* Video info text */
+.video-info h4 {
+  font-size: 1.15rem;
+}
+
+/* Larger text for key numbers */
+.stat-item {
+  font-size: 1.2rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .card-content {
+    font-size: 1.1rem;
+  }
+  
+  .content-lead {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* Country Regulations */
+.country-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin: 2rem 0;
+}
+
+.country-card {
+  padding: 1.2rem;
+  background: rgba(255,255,255,0.95);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  color: var(--text-dark);
+}
+
+.country-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.country-flag {
+  font-size: 2rem;
+  margin-right: 1rem;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+.country-card h4 {
+  margin: 0 0 0.3rem 0;
+  color: var(--dark-blue);
+  font-size: 1.1rem;
+}
+
+.country-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .country-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .country-flag {
+    margin-bottom: 1rem;
+  }
+}
+
+
+/* Hazardous Cards Grid */
+.hazard-cards-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin: 2rem 0;
+}
+
+.hazard-card {
+  background: var(--card-bg);
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.hazard-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hazard-card-icon {
+  font-size: 1.8rem;
+}
+
+.hazard-content-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.hazard-point {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--divider-color);
+  font-size: 1.1rem;
+}
+
+.hazard-point:last-child {
+  border-bottom: none;
+}
+
+.hazard-source {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--muted-text);
+  text-align: right;
 }
