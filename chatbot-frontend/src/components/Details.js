@@ -6,6 +6,10 @@ import Button from './Button';
 const Details = () => {
   const navigate = useNavigate(); // Hook to handle navigation
 
+const handleEducation = () => {
+  navigate("/education");
+};
+
   return (
     <DetailsContainer>
       <DetailsContent>
@@ -17,7 +21,7 @@ const Details = () => {
             Our advanced AI technology optimizes your e-waste recycling process, maximizing resource recovery while minimizing environmental impact. Discover industry insights and connect with experts at our exclusive community events—all designed to empower a greener future.
           </DetailsDescription>
           <ButtonGroup>
-            <Button primary={false}>Learn More</Button>
+          <Button primary={false} onClick={handleEducation}>Learn more</Button>
             <Button primary={true} onClick={() => navigate('/events')}>Explore Events</Button> {/* Navigate to EventsPage */}
           </ButtonGroup>
         </DetailsLeft>
