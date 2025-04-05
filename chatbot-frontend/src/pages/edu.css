@@ -35,6 +35,9 @@
   font-family: 'Segoe UI', system-ui, sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Header Section */
@@ -106,13 +109,14 @@
   border-radius: 4px;
 }
 
-/* Card System - Fixed Dropdown Behavior */
+/* Category Grid */
 .category-grid {
   display: grid;
   gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+/* Card System */
 .edu-card {
   background: var(--gradient-card-1);
   border-radius: 16px;
@@ -124,7 +128,6 @@
   z-index: 1;
 }
 
-/* Category-specific Card Styles */
 .edu-card[data-category="hazardous-waste-handling"] {
   background: var(--gradient-card-2);
   border-left: 4px solid var(--danger-color);
@@ -140,7 +143,6 @@
   border-left: 4px solid var(--accent-color);
 }
 
-/* Active Card Styles - Fixed Dropdown Background */
 .edu-card.active {
   box-shadow: var(--shadow-active);
   transform: translateY(-5px);
@@ -196,35 +198,44 @@
   color: var(--secondary-color);
 }
 
-/* Card Content - Fixed Dropdown Background */
+/* Card Content */
 .card-content {
   padding: 2rem;
+  padding-bottom: 2.5rem;
   display: none;
   color: var(--text-dark);
   border-top: 1px solid rgba(0,0,0,0.05);
   background: var(--gradient-dropdown);
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .edu-card.active .card-content {
   display: block;
-  animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   background: linear-gradient(to bottom, #e3f2fd, #bbdefb) !important;
 }
 
 @keyframes slideDown {
   from {
     opacity: 0;
+    max-height: 0;
     transform: translateY(-10px);
   }
   to {
     opacity: 1;
+    max-height: 2000px;
     transform: translateY(0);
   }
 }
 
-/* Stats Grid */
+/* Content Elements */
+.content-lead {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
 .stats-grid {
   display: grid;
   gap: 1.2rem;
@@ -247,7 +258,10 @@
   font-style: italic;
 }
 
-/* Hazard Items */
+.subsection-list {
+  margin: 1.5rem 0;
+}
+
 .hazard-item {
   background: linear-gradient(to right, #fff0f0 0%, #fff6f6 100%);
   border-left: 4px solid var(--danger-color);
@@ -347,8 +361,12 @@
 .resource-type.analysis { background: rgb(213, 194, 49); }
 .resource-type.who-report { background: rgb(49, 79, 213); }
 .resource-type.tutorial { background: #2A9D8F; }
+.resource-type.ai-insight { background: #792a9d; }
 .resource-type.case-study { background: #E76F51; }
-.resource-type.innovation { background: #9C27B0; }
+.resource-type.innovation { background: #9eb80a; }
+.resource-type.blog { background: #df1320; }
+.resource-type.magazine { background: #0e5a23; }
+.resource-type.article { background: #837c7e; }
 
 .resource-title {
   flex: 1;
@@ -362,10 +380,103 @@
   flex-shrink: 0;
 }
 
-/* Mobile Optimization */
+/* Video Section Enhancements */
+.video-section {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.video-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+}
+
+.video-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  color: var(--dark-blue);
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+}
+
+.video-title::before {
+  content: '▶';
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #000;
+}
+
+.video-container:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Fix for "Want to Know More" video section */
+.edu-card[data-category="want-to-know-more"] .video-container {
+  max-width: 100% !important;
+}
+
+.edu-card[data-category="want-to-know-more"] .video-container video {
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .edu-card[data-category="want-to-know-more"] {
+    grid-column: 1 / -1;
+  }
+
+  .edu-card[data-category="want-to-know-more"] .video-container {
+    padding-bottom: 45%;
+  }
+
+  .edu-card[data-category="want-to-know-more"] .video-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .edu-card[data-category="want-to-know-more"] .video-container {
+    padding-bottom: 56.25%;
+  }
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .edu-header {
-    padding: 3rem 1.5rem;
+    margin-top: 80px;
+    padding: 2rem 1rem;
   }
   
   .edu-header h1 {
@@ -374,16 +485,28 @@
   
   .category-title {
     font-size: 1.6rem;
-    margin: 2rem 0;
   }
   
   .category-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   
   .card-content {
     padding: 1.5rem;
+  }
+  
+  .video-container {
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-title {
+    font-size: 1.2rem;
+  }
+  
+  .video-container {
+    padding-bottom: 75%;
   }
 }
 
@@ -404,7 +527,6 @@
   opacity: 0;
 }
 
-/* Delay animations for staggered effect */
 .edu-card:nth-child(1) { animation-delay: 0.1s; }
 .edu-card:nth-child(2) { animation-delay: 0.2s; }
 .edu-card:nth-child(3) { animation-delay: 0.3s; }
@@ -435,33 +557,4 @@
   .card-content {
     display: block !important;
   }
-}
-/* Remove these */
-.infographic-image {
-  max-width: 100%;
-  height: auto;
-  margin-right:1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* Keep these for the button */
-.infographic-section {
-  margin: 2rem 0;
-  text-align: center;
-}
-
-.infographic-link {
-  display: inline-block;
-  margin-top: 1.2rem;
-  padding: 0.5rem 1.2rem;
-  background: var(--primary-color);
-  color: white;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.infographic-link:hover {
-  transform: translateY(-2px);
 }
