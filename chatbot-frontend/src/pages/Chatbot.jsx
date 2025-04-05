@@ -131,93 +131,156 @@ function Chatbot() {
 
   return (
     <Layout>
+      <NavbarSpacer />
       <ChatContainer>
-        <LocationSection>
+      <LocationSection>
           <LocationComponent />
           <EwasteMap compact={true} />
         </LocationSection>
-
-        <ChatHeader>EcoBuddy Chat</ChatHeader>
+        <ChatHeader>
+          <h1>EcoBuddy Chat</h1>
+          <p>Your Sustainable Companion</p>
+        </ChatHeader>
 
         <ChatWrapper>
           <ChatContent>
-          <MessageContainer ref={messagesEndRef}>
-  {messages.map((msg, index) => (
-    <MessageBubble key={index} className={msg.sender}>
-      {msg.image && (
-        <ImagePreview>
-          <img src={msg.image} alt="Uploaded content" />
-        </ImagePreview>
-      )}
-      {msg.text && <MessageText>{msg.text}</MessageText>}
-    </MessageBubble>
-  ))}
-</MessageContainer>
-
+            <MessageContainer ref={messagesEndRef}>
+              {messages.map((msg, index) => (
+                <MessageBubble key={index} className={msg.sender}>
+                  {msg.image && (
+                    <ImagePreview>
+                      <img src={msg.image} alt="User content" />
+                    </ImagePreview>
+                  )}
+                  {msg.text && <MessageText>{msg.text}</MessageText>}
+                  {msg.sender === "bot" && (
+                    <BotIndicator>
+                      <span>🌱 EcoBuddy</span>
+                    </BotIndicator>
+                  )}
+                </MessageBubble>
+              ))}
+            </MessageContainer>
 
             <InputSection>
-              <FileInput>
-                <label htmlFor="file-upload">
-                  <FiPaperclip />
-                  <input
-                    id="file-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImage(e.target.files[0])}
+              <InputGroup>
+                <FileInput>
+                  <label htmlFor="file-upload" title="Attach image">
+                    <FiPaperclip />
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setImage(e.target.files[0])}
+                      disabled={isLoading}
+                    />
+                  </label>
+                  {image && (
+                    <FileName>
+                      {image.name}
+                      <button
+                        onClick={() => setImage(null)}
+                        aria-label="Remove file"
+                      >
+                        ×
+                      </button>
+                    </FileName>
+                  )}
+                </FileInput>
+
+                <TextInput
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                  placeholder="Type your eco-question..."
+                  disabled={isLoading}
+                  aria-label="Type your message"
+                />
+
+                <ButtonGroup>
+                  <SendButton
+                    onClick={sendMessage}
                     disabled={isLoading}
-                  />
-                </label>
-                {image && (
-                  <FileName>
-                    {image.name}
-                    <button onClick={() => setImage(null)}>×</button>
-                  </FileName>
-                )}
-              </FileInput>
-
-              <TextInput
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Type your message..."
-                disabled={isLoading}
-              />
-
-              <ButtonGroup>
-                <SendButton onClick={sendMessage} disabled={isLoading}>
-                  {isLoading ? <Spinner /> : <FiSend />}
-                </SendButton>
-                <ClearButton onClick={clearChat} disabled={isLoading}>
-                  <FiTrash2 />
-                </ClearButton>
-              </ButtonGroup>
+                    aria-label="Send message"
+                  >
+                    {isLoading ? <Spinner /> : <FiSend />}
+                  </SendButton>
+                  <ClearButton
+                    onClick={clearChat}
+                    disabled={isLoading}
+                    aria-label="Clear chat"
+                  >
+                    <FiTrash2 />
+                  </ClearButton>
+                </ButtonGroup>
+              </InputGroup>
             </InputSection>
           </ChatContent>
         </ChatWrapper>
       </ChatContainer>
+      <FooterSpacer />
     </Layout>
   );
 }
 
-// Styled components
+// Styled components with enhanced responsiveness
+
 const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   height: calc(100vh - 80px);
+  background: white;
   padding: 1.5rem;
-  background: #f8f9fa;
+  gap: 1rem;
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+    height: calc(100vh - 70px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    height: calc(100vh - 60px);
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
 `;
 
-const ChatHeader = styled.h1`
-  font-size: 2rem;
+const ChatHeader = styled.header`
   text-align: center;
-  background: linear-gradient(to right, #2563eb, #9333ea);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 50 auto 1rem; /* Adjusted margin to remove extra space */
-`;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: -40px auto 1.5rem;
+  width: 100%;
+  max-width: 1280px;
 
+  h1 {
+    font-size: 2rem;
+    margin: 0;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #845ec2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    h1 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+  }
+`;
 const LocationSection = styled.div`
   background: white;
   padding: 1rem;
@@ -233,30 +296,33 @@ const LocationSection = styled.div`
 `;
 
 const ChatWrapper = styled.div`
-  max-width: 95%;
-  margin: 0 auto;
-  background: linear-gradient(
-    to right,
-rgb(62, 124, 223),
-    #8a95bf,
-    #2db3e3,
-    #3b7c87
-  );
-  border-radius: 12px;
-  padding: 2px; /* Creates a subtle gradient border effect */
-  overflow: hidden;
   flex: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
+  border: 2px solid rgb(144, 107, 255); /* Contrast border */
+
+  @media (max-width: 1024px) {
+    margin: 0 1rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    max-width: 100%;
+  }
 `;
 
 const ChatContent = styled.div`
-  background: white;
-  border-radius: 10px;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
 `;
 
 const MessageContainer = styled.div`
@@ -265,75 +331,187 @@ const MessageContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  background: linear-gradient(135deg,rgb(253, 255, 255),rgb(43, 198, 218));
+  gap: 1.5rem;
+  background: linear-gradient(135deg, rgb(253, 255, 255), rgb(79, 164, 175));
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
 `;
 
 const MessageBubble = styled.div`
-  max-width: 75%;
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  line-height: 1.4;
+  max-width: 80%;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  line-height: 1.5;
   animation: ${keyframes`
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-  `} 0.3s ease-in;
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  `} 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  position: relative;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
 
   &.user {
-    background: #007bff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     align-self: flex-end;
-    border-radius: 1rem 1rem 0 1rem;
+    border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
   }
 
   &.bot {
-    background: #fff;
-    color: #333;
+    background: linear-gradient(135deg, #c3f7cf 0%, #9fd8e5 100%);
+    color: #1f2937;
     align-self: flex-start;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 1rem 1rem 1rem 0;
+    border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 1rem;
   }
 `;
 
 const MessageText = styled.div`
-  margin: 0.5rem 0;
+  margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
+  font-size: 1rem;
+  line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const ImagePreview = styled.div`
   margin: 0.5rem 0;
   img {
-    max-width: 250px;
+    max-width: 100%;
+    max-width: min(100%, 300px);
     max-height: 250px;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+  }
+`;
+
+const BotIndicator = styled.div`
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  span {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 `;
 
 const InputSection = styled.div`
+  padding: 1.5rem;
+  background: linear-gradient(90deg, #d6e1f3, #8a95bf, #2db3e3, rgb(80, 105, 151));
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
+`;
+
+const InputGroup = styled.div`
   display: flex;
   gap: 1rem;
-  padding: 1.5rem;
-  background: linear-gradient(90deg, #D6E1F3, #8A95BF, #2DB3E3,rgb(59, 86, 135));
-  border-top: 1px solid #eee;
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+`;
+
+const TextInput = styled.input`
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 2rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: white;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0.75rem 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 `;
 
 const FileInput = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+
   label {
     cursor: pointer;
-    padding: 0.5rem;
-    color: #007bff;
+    padding: 0.75rem;
+    background: #f3f4f6;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: grid;
+    place-items: center;
+    
     &:hover {
-      opacity: 0.8;
+      background: #e5e7eb;
+      transform: rotate(45deg);
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: #4b5563;
     }
   }
+
   input[type="file"] {
     display: none;
   }
@@ -341,87 +519,110 @@ const FileInput = styled.div`
 
 const FileName = styled.div`
   position: absolute;
-  bottom: -28px;
+  bottom: calc(100% + 0.5rem);
   left: 0;
   background: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
   font-size: 0.8rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  white-space: nowrap;
+
   button {
     border: none;
     background: none;
-    color: #666;
+    color: #6b7280;
     cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    
     &:hover {
-      color: #ff4444;
+      color: #ef4444;
     }
-  }
-`;
-
-const TextInput = styled.input`
-  flex: 1;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid #ddd;
-  border-radius: 2rem;
-  font-size: 1rem;
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: flex-end;
+  }
 `;
 
 const BaseButton = styled.button`
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem;
   border: none;
-  border-radius: 2rem;
+  border-radius: 50%;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: all 0.2s;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
 `;
 
 const SendButton = styled(BaseButton)`
-  background: #007bff;
+  background: linear-gradient(45deg, #ff6b6b 0%, #ff8e53 100%);
   color: white;
+
   &:hover:not(:disabled) {
-    background: #0056b3;
+    background: linear-gradient(45deg, #ff5757 0%, #ff7b3d 100%);
+    transform: translateY(-1px);
   }
 `;
 
 const ClearButton = styled(BaseButton)`
-  background: #ff4444;
+  background: linear-gradient(45deg, #4facfe 0%, #845ec2 100%);
   color: white;
+
   &:hover:not(:disabled) {
-    background: #cc0000;
+    background: linear-gradient(45deg, #3d9cfd 0%, #7649b8 100%);
+    color: white;
   }
 `;
 
 const Spinner = styled.div`
-  width: 20px;
-  height: 20px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #007bff;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
   border-radius: 50%;
   animation: ${keyframes`
-    from {
-      transform: rotate(0deg);
-    }
-  `} 1s linear infinite;
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  `} 0.8s linear infinite;
+`;
+
+export const NavbarSpacer = styled.div`
+  height: 90px;
+  background: white;
+
+  @media (max-width: 768px) {
+    height: 60px;
+  }
+`;
+
+export const FooterSpacer = styled.div`
+  height: 40px;
+  background: white;
+
+  @media (max-width: 768px) {
+    height: 30px;
+  }
 `;
 
 export default Chatbot;

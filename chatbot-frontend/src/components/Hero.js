@@ -4,7 +4,12 @@ import styled from 'styled-components';
 import Button from './Button';
 
 const Hero = () => {
-  const navigate = useNavigate(); // Added this line
+  const navigate = useNavigate(); 
+
+  const handleEducation = () => {
+    navigate("/education");
+  };
+
 
   return (
     <HeroContainer id="home">
@@ -25,7 +30,7 @@ const Hero = () => {
               <Button primary={true} onClick={() => navigate('/chatbot')}>
                 Upload
               </Button>
-              <Button primary={false}>Learn more</Button>
+              <Button primary={false} onClick={handleEducation}>Learn more</Button>
             </ButtonGroup>
           </HeroRight>
         </HeroRow>
@@ -43,8 +48,7 @@ export default Hero;
 
 const HeroContainer = styled.section`
   width: 100%;
-  /* Adjust top padding to prevent navbar overlap */
-  padding: 120px 20px 80px;
+  padding: 140px 20px 80px;
   overflow: hidden;
 `;
 
