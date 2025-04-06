@@ -35,7 +35,7 @@ const Hero = () => {
           </HeroRight>
         </HeroRow>
         <HeroImageContainer>
-          <HeroImage src="images/hero.jpg" alt="E-waste classification" />
+          <HeroImage src="images/home.jpeg" alt="E-waste classification" />
         </HeroImageContainer>
       </HeroContent>
     </HeroContainer>
@@ -130,7 +130,7 @@ const ButtonGroup = styled.div`
 `;
 
 const HeroImageContainer = styled.div`
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
 `;
 
