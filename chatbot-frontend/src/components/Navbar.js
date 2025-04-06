@@ -71,9 +71,8 @@ const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
             <DesktopNav>
               <NavItem href="/#home">Home</NavItem>
               {!hideEvents && <NavItem href="/events">Events</NavItem>}
-              <NavItem href="/#team">Team</NavItem>
-              <NavItem href="/#testimonials">Testimonials</NavItem>
-              <NavItem href="/#faqs">Contact</NavItem>
+              <NavItem href="/education">Awareness Hub</NavItem>
+              <NavItem href="/forum">Forum</NavItem>
               {!hideGetStarted && (
                 <GetStartedButton
                   onClick={() => {
@@ -81,7 +80,7 @@ const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
                     section && section.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
-                  Get Started
+                  Open Chat
                 </GetStartedButton>
               )}
             </DesktopNav>

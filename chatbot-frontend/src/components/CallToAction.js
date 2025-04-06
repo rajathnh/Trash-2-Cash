@@ -19,7 +19,7 @@ const CallToAction = () => {
             Find the best solution – sell, dispose, or repair your e-waste.
           </Tagline>
           <CTAButton primary onClick={() => navigate("/chatbot")}>
-            Upload
+            Open Chat
           </CTAButton>
         </CTALeft>
       </CTAContent>
