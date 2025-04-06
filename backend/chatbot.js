@@ -150,24 +150,14 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
     };
   }
 
-  // Append the user's message
-  const userMessage = { 
-    role: "user", 
-    content: message, 
-    timestamp: new Date() 
-  };
-  if (imageBase64) {
-    userMessage.imageData = imageBase64;
-  }
-  chatHistoryDoc.messages.push(userMessage);
-  console.log("User message appended:", userMessage);
-
+  // Store disposal centers info separately - don't add to chat history yet
+  let centersString = "";
+  
   // Check for disposal-related query (if location is provided)
   const disposalKeywords = ["dispose", "disposal", "get rid", "junk"];
   const messageLower = message.toLowerCase();
   const isDisposalQuery = disposalKeywords.some(keyword => messageLower.includes(keyword));
 
-  let centersString = "";
   if (isDisposalQuery && locationStr) {
     console.log("Disposal query detected. Processing location for nearby centers...");
     try {
@@ -185,6 +175,18 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
       console.error("Error processing disposal branch:", error);
     }
   }
+
+  // Append the user's message
+  const userMessage = { 
+    role: "user", 
+    content: message, 
+    timestamp: new Date() 
+  };
+  if (imageBase64) {
+    userMessage.imageData = imageBase64;
+  }
+  chatHistoryDoc.messages.push(userMessage);
+  console.log("User message appended:", userMessage);
 
   // Determine if we need to refresh the system prompt
   // We'll refresh every 10 messages (counting from 0)
@@ -289,21 +291,29 @@ async function getGeminiResponse(userId, message, imageBase64, locationStr) {
       let botReply = response.data.candidates[0].content.parts[0].text;
       console.log("Gemini API reply:", botReply);
     
-      // If we have centers information, append it to the bot's reply
-      if (centersString) {
-        botReply += centersString;
+      // Check if we have centers to add and if the bot is asking for location
+      let fullReply;
+      if (centersString && botReply.includes("location") && 
+         (botReply.includes("provide") || botReply.includes("need") || botReply.includes("share"))) {
+        // Replace the "I need your location" part with a direct introduction to centers
+        fullReply = "Based on your location, here are some e-waste disposal centers near you:" + centersString;
+      } else {
+        // Otherwise just append centers to the end if they exist
+        fullReply = botReply + centersString;
       }
-    
-      // Append Gemini's response to the chat history
+      
+      // Store the COMBINED response in chat history
       chatHistoryDoc.messages.push({
         role: "assistant",
-        content: botReply,
+        content: fullReply,
         timestamp: new Date(),
       });
     
+      // Save the updated chat history
       await chatHistoryDoc.save();
     
-      return botReply;
+      // Return the COMBINED response to the user
+      return fullReply;
     } else {
       console.error("Unexpected Gemini API response structure:", response.data);
       return "Sorry, I couldn't generate a response.";
