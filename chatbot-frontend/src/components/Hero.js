@@ -35,7 +35,7 @@ const Hero = () => {
           </HeroRight>
         </HeroRow>
         <HeroImageContainer>
-          <HeroImage src="images/home.jpeg" alt="E-waste classification" />
+          <HeroImage src="images/home.jpg" alt="E-waste classification" />
         </HeroImageContainer>
       </HeroContent>
     </HeroContainer>
