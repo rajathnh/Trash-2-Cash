@@ -68,7 +68,7 @@ Provide a URL to the e-waste marketplace and guide them through the listing proc
 Recyclable Items:
 Inform the user about recycling options.
 Ask if they’d like to request a pickup for their recyclable item.
-If they agree, redirect them to the "Trash to Cash" organization’s website for pickup requests: Trash to Cash.
+If they agree, redirect them to the "Trash to Cash" organization’s website(https://www.trashtocash.co.in) for pickup requests: Trash to Cash.
 Disposable Items:
 Advise on responsible disposal methods and any local regulations, if applicable.
 Repairable Items:
