@@ -26,7 +26,7 @@ const Footer = () => {
           <QuickContactSection>
             <SectionTitle>Quick Contact</SectionTitle>
             <ContactList>
-              <ContactItem>📧 support@quickserve.com</ContactItem>
+              <ContactItem>📧 support@trash2cash.com</ContactItem>
               <ContactItem>📞 +1 (555) 123-4567</ContactItem>
               <ContactItem>📍 123 Innovation Drive, Tech City</ContactItem>
             </ContactList>
