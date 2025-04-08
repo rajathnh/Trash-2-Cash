@@ -323,7 +323,7 @@ const Edu = () => {
 
   return (
     <>
-      <Navbar hideGetStarted={true} disableSlide={true} />
+      <Navbar hideGetStarted={true} disableSlide={true} hideAwarenessHub={true} showChatButton={true}/>
       <div className="edu-container">
         <header className="edu-header">
           <h1>Join EcoBuddy: Learn & Act on E-Waste</h1>
@@ -518,4 +518,3 @@ const Edu = () => {
 };
 
 export default Edu;
-

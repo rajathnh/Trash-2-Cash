@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
+const Navbar = ({ 
+  hideGetStarted, 
+  disableSlide, 
+  hideEvents,
+  hideAwarenessHub,
+  hideForum,
+  showChatButton  // Now properly included in props
+}) => {
+  // Component state and other logic remains unchanged
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   // Set default top value based on disableSlide prop
@@ -69,10 +77,15 @@ const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
             </BrandWrapper>
 
             <DesktopNav>
-              <NavItem href="/#home">Home</NavItem>
+            <NavItem href="/#home">Home</NavItem>
               {!hideEvents && <NavItem href="/events">Events</NavItem>}
-              <NavItem href="/education">Awareness Hub</NavItem>
-              <NavItem href="/forum">Forum</NavItem>
+              {!hideAwarenessHub && <NavItem href="/education">Awareness Hub</NavItem>}
+              {!hideForum && <NavItem href="/forum">Forum</NavItem>}
+              {showChatButton && (
+                <ChatButton onClick={() => window.location.href = '/chatbot'}>
+                  Chat Now
+                </ChatButton>
+              )}
               {!hideGetStarted && (
                 <GetStartedButton
                   onClick={() => {
@@ -100,11 +113,15 @@ const Navbar = ({ hideGetStarted, disableSlide, hideEvents }) => {
         onClick={() => setIsMenuOpen(false)}
       >
         <MobileMenuContent onClick={(e) => e.stopPropagation()}>
-          <MobileNavItem href="/#home">Home</MobileNavItem>
-          {!hideEvents && <MobileNavItem href="/#details">Events</MobileNavItem>} 
-          <MobileNavItem href="/#team">Team</MobileNavItem>
-          <MobileNavItem href="/#testimonial">Testimonials</MobileNavItem>
-          <MobileNavItem href="/#faqs">FAQs</MobileNavItem>
+        <MobileNavItem href="/#home">Home</MobileNavItem>
+          {!hideEvents && <MobileNavItem href="/#events">Events</MobileNavItem>}
+          {!hideAwarenessHub && <MobileNavItem href="/#education">Awareness Hub</MobileNavItem>}
+          {!hideForum && <MobileNavItem href="/#forum">Forum</MobileNavItem>}
+          {showChatButton && (
+            <MobileChatButton onClick={() => window.location.href = '/chatbot'}>
+              Chat Now
+            </MobileChatButton>
+          )}
           {!hideGetStarted && (
             <MobileGetStartedButton
               onClick={() => {
@@ -321,3 +338,38 @@ export {
   MobileNavItem,
   MobileGetStartedButton,
 };
+
+const ChatButton = styled.button`
+  margin-left: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  color: rgb(34, 77, 83);
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const MobileChatButton = styled.button`
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #1f2937;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 9999px;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;

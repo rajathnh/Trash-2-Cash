@@ -7,7 +7,6 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaLeaf, FaRegClock, FaUsers } from 'reac
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 console.log(BACKEND_URL)
 
-
 const EventsPage = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -51,7 +50,7 @@ const EventsPage = () => {
 
   return (
     <>
-      <Navbar hideGetStarted={true} disableSlide={true} />
+      <Navbar hideGetStarted={true} disableSlide={true} hideEvents={true} showChatButton={true}/>
       <div className="events-page">
         <div className="events-container">
           <div className="events-header">

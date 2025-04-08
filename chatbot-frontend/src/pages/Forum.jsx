@@ -81,7 +81,7 @@ const Forum = () => {
 
   return (
     <>
-      <Navbar hideGetStarted={true} disableSlide={true}/>
+      <Navbar hideForum={true} hideGetStarted={true} disableSlide={true} showChatButton={true}/>
       <div className="forum-container">
         <h2>Community Discussion Forum</h2>
         <p className="forum-subtitle">
