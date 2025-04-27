@@ -33,7 +33,7 @@ Trash2Cash offers a comprehensive platform featuring:
 5.  **📅 Events Page:** Auto-updated listings of recycling events (via Puppeteer scraping) to foster real-world engagement.
 
 ### How It Solves the Problem
-![Flowchart](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/flowchart.png?raw=true) <!-- *** UPDATE LINK if image path is different *** -->
+![Flowchart](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/flowchart.jpg) <!-- *** UPDATE LINK if image path is different *** -->
 1. User visits the web app.
 2. Uploads an image or describes the e-waste item.
 3. The AI Chatbot (powered by Gemini) classifies the item and suggests next steps.
@@ -78,16 +78,16 @@ Trash2Cash offers a comprehensive platform featuring:
 
 *(Embed these images directly by uploading them to your repo and updating the links)*
 
-![ChatBot Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/chatbot_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
-![Education Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/edu_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
-![Community Forum Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/forum_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
-![Events Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/events_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
+![ChatBot Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/chat.jpg) <!-- *** UPDATE LINK *** -->
+![Education Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/edu.jpg) <!-- *** UPDATE LINK *** -->
+![Community Forum Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/forum.jpg) <!-- *** UPDATE LINK *** -->
+![Events Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/events.jpg) <!-- *** UPDATE LINK *** -->
 
 ---
 
 ## 🏗️ Architecture
 
-![Architecture Diagram](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/architecture.png?raw=true) <!-- *** UPDATE LINK *** -->
+![Architecture Diagram](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/architecture.png) <!-- *** UPDATE LINK *** -->
 *   **Frontend:** React (Hosted on Vercel)
 *   **Backend:** Node.js + Express (Hosted on Google Cloud Run)
 *   **Database:** MongoDB Atlas
