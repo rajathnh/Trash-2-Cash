@@ -76,7 +76,6 @@ Trash2Cash offers a comprehensive platform featuring:
 
 ## 📸 MVP Snapshots
 
-*(Embed these images directly by uploading them to your repo and updating the links)*
 
 ![ChatBot Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/chat.jpg) <!-- *** UPDATE LINK *** -->
 ![Education Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/Images/edu.jpg) <!-- *** UPDATE LINK *** -->
