@@ -1,149 +1,224 @@
 # Trash2Cash: AI Assistant & Community Platform for Waste Management
 
-Trash2Cash is a comprehensive web application designed to promote sustainable waste management practices. It features the "EcoBuddy" AI assistant for waste classification and guidance (using Google Gemini), alongside community features like a forum, an educational hub, and event listings potentially sourced via web scraping.
+
+Trash2Cash is a dedicated AI chatbot platform developed for the Google Solution Challenge. It helps users manage e-waste responsibly by classifying items, suggesting disposal options (recycle, sell, repair, safe disposal), and fostering community awareness through an integrated forum and event listings.
+
+*Our solution aligns with the following United Nations Sustainable Development Goals (SDGs):*
+
+*   **Goal 11:** Sustainable Cities and Communities (Focus on waste management)
+*   **Goal 12:** Responsible Consumption and Production (Focus on reducing waste, recycling, reuse)
+
+---
+
+## 📍 Project Links
+
+*   **Live MVP:** [https://trash-2-cash.vercel.app](https://trash-2-cash.vercel.app)
+*   **Demo Video:** [https://youtu.be/watch?v=29t3g7Ywg1c](youtube.com/watch?v=29t3g7Ywg1c)  <!-- *** Replace with your Video ID *** -->
+*   **Presentation Slides:** [View Slides](https://docs.google.com/presentation/d/1I9J4DJtvCvxi7vRP36vee0WIRENECx-D/edit#slide=id.p1)
+*   **GitHub Repository:** [https://github.com/rajathnh/Trash-2-Cash](https://github.com/rajathnh/Trash-2-Cash) <!-- *** Update Link *** -->
+
+---
+
+## 🤔 Problem Statement
+
+**The Growing Crisis of E-Waste:** Improper disposal of electronic waste poses significant environmental threats due to toxic materials and resource depletion. Citizens often lack accessible tools to classify waste correctly, find appropriate local disposal/recycling options, and understand the broader impact, hindering sustainable practices.
+
+## 💡 Our Solution: Trash2Cash
+
+Trash2Cash offers a comprehensive platform featuring:
+
+1.  **🤖 AI Waste Assistant (EcoBuddy):** Uses **Google Gemini API** to classify e-waste from text/images and guides users on next steps (Recycle, Sell, Repair, Dispose). Features multilingual support.
+2.  **📍 Location-Based Disposal Centers:** Integrates **Google Maps API** to show nearby certified recycling/disposal locations.
+3.  **📚 Awareness Hub:** Educational content explained by the EcoBuddy mascot.
+4.  **💬 Community Forum:** Allows users to share tips, recycling stories, and ask questions.
+5.  **📅 Events Page:** Auto-updated listings of recycling events (via Puppeteer scraping) to foster real-world engagement.
+
+### How It Solves the Problem
+![Flowchart](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/flowchart-image.png?raw=true) <!-- *** Replace with link to flowchart image in your repo *** -->
+1. User visits the web app.
+2. Uploads an image or describes the e-waste item.
+3. The AI Chatbot (powered by Gemini) classifies the item and suggests next steps.
+4. Google Maps integration suggests relevant local options (recycling centers, etc.).
+5. The Forum and Events pages build community awareness and drive action.
+
+### Unique Selling Points (USPs)
+*   **Real-time AI Guidance:** Smart chatbot provides instant, actionable advice, unlike static websites.
+*   **AI + Maps Integration:** Offers location-specific help, not just generic information.
+*   **Community-Driven:** Builds a movement via forums and real-world event listings.
+*   **Multilingual & Inclusive:** Accessible to a wider audience.
+
+---
+
+## ✨ Key Features
 
 
-## Features
+**For Users:**
+*   **Image Upload:** Snap/upload e-waste images for instant identification.
+*   **Smart Chatbot:** Classifies items, asks follow-ups, guides actions using Google Gemini.
+*   **Disposal Centers:** Uses Google Maps API to show nearby certified locations.
+*   **Multilingual:** Accessible in regional languages.
 
-*   **🤖 AI Waste Assistant (EcoBuddy):**
-    *   Classifies waste (Sellable, Recyclable, Repairable, Compostable, Disposable) from user text and image uploads using the **Google Gemini API**.
-    *   Provides tailored, actionable advice based on classification and a detailed system prompt.
-    *   Maintains conversation history per user (**MongoDB**).
-*   **📍 Location-Based Services:**
-    *   Retrieves user's geolocation (with permission).
-    *   Suggests nearby e-waste disposal centers using the **Google Places API** based on user location for relevant chat queries.
-    *   Displays an interactive map via **Google Maps API** on the frontend (though the `EwasteMap` component currently only performs a background search).
-*   **💬 Community Forum:**
-    *   Allows users (identified by a persistent `userId` and prompted `userName` stored in localStorage) to post messages and images.
-    *   Displays posts from all users in a feed, fetched periodically.
-*   **📚 Educational Hub:**
-    *   Provides structured information on e-waste issues, impacts, handling guidelines, recycling processes, regulations, and links to external resources/videos.
-*   **📅 Event Listings:**
-    *   Displays sustainable waste management events fetched from the backend API (`/api/event`).
-    *   Includes a backend script (`getEvents.js`) using **Puppeteer** to scrape event data from '10times.com' and store it in MongoDB.
-*   **🔒 User Authentication (Partial/Inferred):**
-    *   Uses **JWT (JSON Web Tokens)** on the backend (implied by `JWT_SECRET`, `JWT_LIFETIME` env vars), suggesting secure routes likely exist for forum/event actions requiring login (though not fully shown in provided frontend code).
-    *   Chat and basic Forum interaction use localStorage `userId` and `userName`.
-*   **☁️ Cloud Image Storage (Inferred):**
-    *   Presence of **Cloudinary** environment variables suggests it's used for storing user-uploaded images (likely for Forum posts, potentially user profiles).
+**For Awareness & Engagement:**
+*   **Awareness Pages:** Educational content featuring the EcoBuddy mascot.
+*   **Community Forum:** Space to share repair tips, recycling stories, ask questions.
+*   **Events Page:** Auto-updated listings of recycling events via Puppeteer.
 
-## 🛠️ Tech Stack
+**Intelligent Backend:**
+*   **AI Classification Engine:** Google Gemini API for image understanding & smart responses.
+*   **Chat Logging & Feedback:** MongoDB stores interactions to potentially improve responses over time.
 
-*   **Frontend:** React, Styled Components, Axios, React Router DOM
-*   **Backend:** Node.js, Express.js
-*   **Database:** MongoDB (with Mongoose ODM)
-*   **AI:** Google Gemini API
-*   **APIs:** Google Maps API
-*   **Cloud Storage:** Cloudinary
-*   **Authentication:** JWT (jsonwebtoken library)
-*   **File Uploads:** Multer (for backend initial handling)
-*   **Web Scraping:** Puppeteer (for `getEvents.js`)
-*   **Environment Variables:** dotenv
-*   **CORS:** cors package
+---
 
-## 🚀 Getting Started
+## 🎬 Demo Video
+
+[![Watch the demo video]](youtube.com/watch?v=29t3g7Ywg1c) <!-- *** Replace with your Video ID *** -->
+*A short walkthrough of our core features, including the chatbot, image classification, forum, events, and disposal suggestions.*
+
+---
+
+## 📸 MVP Snapshots
+
+*(Based on Slide 7 - Embed these images directly)*
+
+![ChatBot Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/chatbot-screenshot.png?raw=true) <!-- *** Replace link *** -->
+![Education Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/education-screenshot.png?raw=true) <!-- *** Replace link *** -->
+![Community Forum Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/forum-screenshot.png?raw=true) <!-- *** Replace link *** -->
+![Events Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/events-screenshot.png?raw=true) <!-- *** Replace link *** -->
+
+---
+
+## 🏗️ Architecture
+
+
+![Architecture Diagram](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/architecture-diagram.png?raw=true) <!-- *** Replace link *** -->
+*   **Frontend:** React (Hosted on Vercel)
+*   **Backend:** Node.js + Express (Hosted on Google Cloud Run)
+*   **Database:** MongoDB Atlas
+*   **APIs/Services:** Google Gemini API, Google Maps API, Puppeteer
+
+---
+
+## 🛠️ Technologies Used
+
+
+**Frontend:**
+*   **React.js:** Component-based UI library.
+*   **Axios:** Promise-based HTTP client.
+*   **Styled Components:** CSS-in-JS styling.
+*   **React Router DOM:** Client-side routing.
+*   **Vercel:** Deployment platform for static sites and serverless functions.
+
+**Backend & Infrastructure:**
+*   **Node.js:** JavaScript runtime environment.
+*   **Express.js:** Minimalist web framework for Node.js.
+*   **MongoDB Atlas:** Cloud-hosted MongoDB service.
+*   **Mongoose:** ODM for MongoDB.
+*   **Puppeteer:** Headless Chrome Node.js library (for scraping).
+*   **Multer:** Middleware for handling multipart/form-data (file uploads).
+*   **JWT (jsonwebtoken):** For handling user authentication tokens.
+*   **Cloudinary:** Cloud-based image and video management service.
+*   **dotenv:** Loads environment variables from a `.env` file.
+*   **cors:** Middleware for enabling Cross-Origin Resource Sharing.
+
+**Google Technologies:**
+*   **G Gemini API:** Powers the AI classification and chatbot intelligence.
+*   **G Google Maps API & Places API:** Shows nearest disposal/recycling centers and map integration.
+*   **G Google Cloud Run:** Fully managed compute platform for deploying containerized applications (Backend hosting).
+
+---
+
+## 🚀 Getting Started (For Developers)
+
+*(Includes detailed setup from previous README)*
+
+<details>
+<summary>Click to expand Development Setup Instructions</summary>
 
 ### Prerequisites
-
-*   Node.js (v16 or later recommended)
+*   Node.js (v16+)
 *   npm or yarn
 *   Git
-*   MongoDB instance (local or cloud like MongoDB Atlas)
+*   MongoDB instance (local or Atlas)
 *   Cloudinary Account
-*   Google Cloud Platform Project with:
-    *   Gemini API enabled
-    *   Maps JavaScript API enabled
-    *   Places API enabled
+*   Google Cloud Platform Project with Gemini API, Maps JavaScript API, Places API enabled
 
 ### API Keys & Credentials Needed
-
-You will need the following credentials:
-
 *   MongoDB Connection String (`MONGO_URI`)
-*   JWT Secret Key (`JWT_SECRET` - generate a strong random string)
-*   Cloudinary Cloud Name, API Key, and API Secret (`CLOUDINARY_...`)
+*   JWT Secret Key (`JWT_SECRET`)
+*   Cloudinary Cloud Name, API Key, API Secret (`CLOUDINARY_...`)
 *   Google Gemini API Key (`GEMINI_API_KEY`)
-*   Google Maps/Places API Key (`MAPS_API_KEY` for backend, `REACT_APP_MAPS_API_KEY` for frontend)
+*   Google Maps/Places API Key (`MAPS_API_KEY` & `REACT_APP_MAPS_API_KEY`)
 
 ### Installation & Setup
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/rajathnh/Trash-2-Cash.git
-    cd Trash-2-Cash
+    git clone https://github.com/[Your GitHub Username]/[Your Repo Name].git # Replace link
+    cd [Your Repo Name]
     ```
 
 2.  **Backend Setup:**
-    *   Navigate to the backend directory (adjust `cd` command if necessary, e.g., `cd backend`):
-        ```bash
-        cd backend # Or your backend directory name
-        npm install
-        ```
-    *   Create a `.env` file in the **backend** directory.
-    *   Copy and paste the following structure, replacing the placeholder values with your actual credentials:
+    *   Navigate to the backend directory (e.g., `cd backend`).
+    *   Install dependencies: `npm install`
+    *   Create a `.env` file in the backend directory with the following structure (replace placeholders):
         ```dotenv
-        # Server Configuration
-        PORT=5000 # Or your preferred backend port
-        FRONTEND_URL=http://localhost:3000 # URL of your running frontend
-
-        # Database
+        PORT=5000
+        FRONTEND_URL=http://localhost:3000 # Or your Vercel URL for production
         MONGO_URI="YOUR_MONGODB_CONNECTION_STRING"
-
-        # Authentication
         JWT_SECRET="YOUR_STRONG_RANDOM_JWT_SECRET"
-        JWT_LIFETIME="1d" # Or your preferred token lifetime
-
-        # Cloudinary Credentials
+        JWT_LIFETIME="1d"
         CLOUDINARY_CLOUD_NAME="YOUR_CLOUDINARY_CLOUD_NAME"
         CLOUDINARY_API_KEY="YOUR_CLOUDINARY_API_KEY"
         CLOUDINARY_API_SECRET="YOUR_CLOUDINARY_API_SECRET"
-
-        # Google APIs
         GEMINI_API_KEY="YOUR_GOOGLE_GEMINI_API_KEY"
-        MAPS_API_KEY="YOUR_GOOGLE_MAPS_PLACES_API_KEY" # Used by backend for Places API
+        MAPS_API_KEY="YOUR_GOOGLE_MAPS_PLACES_API_KEY"
         ```
 
 3.  **Frontend Setup:**
-    *   Navigate to the frontend directory (adjust `cd` command if necessary, e.g., `cd ../frontend`):
-        ```bash
-        cd ../frontend # Or your frontend directory name
-        npm install
-        ```
-    *   Create a `.env` file in the **frontend** directory.
-    *   Add the following environment variables, ensuring the URLs/keys match your setup:
+    *   Navigate to the frontend directory (e.g., `cd ../frontend`).
+    *   Install dependencies: `npm install`
+    *   Create a `.env` file in the frontend directory:
         ```dotenv
-        REACT_APP_BACKEND_URL=http://localhost:5000 # Must match backend PORT
-        REACT_APP_MAPS_API_KEY="YOUR_GOOGLE_MAPS_PLACES_API_KEY" # Same key as backend, used for Maps JavaScript API
+        REACT_APP_BACKEND_URL=http://localhost:5000 # Or your backend server URL
+        REACT_APP_MAPS_API_KEY="YOUR_GOOGLE_MAPS_PLACES_API_KEY"
         ```
-        *(Note: Ensure the backend `PORT` and `FRONTEND_URL` align with `REACT_APP_BACKEND_URL` and where the frontend runs, respectively. The CORS configuration in `server.js` must allow the frontend origin.)*
 
-### Running the Application
+### Running the Application Locally
 
 1.  **Start the Backend Server:**
-    *   Navigate to the backend directory.
-    *   Run the start command (ensure `server.js` is your entry point, or use `npm start` if defined in `package.json`):
-        ```bash
-        cd backend # Or your backend directory
-        node server.js
-        ```
-    *   You should see output indicating the server is running (e.g., `Server running on http://localhost:5000`) and connected to MongoDB (`MongoDB connected`).
+    ```bash
+    cd backend # Or your backend directory
+    node chatbot.js
+    ```
 
 2.  **Start the Frontend Development Server:**
-    *   Navigate to the frontend directory.
-    *   Run the start command:
-        ```bash
-        cd ../frontend # Or your frontend directory
-        npm start
-        ```
-    *   This will typically open the application automatically in your default web browser at `http://localhost:3000` (or another port if 3000 is busy).
+    ```bash
+    cd ../frontend # Or your frontend directory
+    npm start
+    ```
+    Access via `http://localhost:3000`.
 
 
-## Usage
 
-*   Open the application in your browser (usually `http://localhost:3000`).
-*   Navigate through the different sections using the Navbar:
-    *   **Home:** Landing page with various informational sections.
-    *   **Chatbot:** Interact with the EcoBuddy AI assistant. Grant location permission if prompted for nearby disposal suggestions.
-    *   **Forum:** View community posts and contribute your own messages/images (you'll be prompted for a username if one isn't set).
-    *   **Education Hub:** Browse articles and resources about e-waste.
-    *   **Events:** View upcoming sustainability events.
+## ✨ Planned Features / Future Scope
+
+
+
+*   **Marketplace Integration:** Single-click listing on platforms like OLX, eBay via API integration.
+*   **E-waste Impact Tracker:** Allow users to track their environmental contribution (diversion metrics, visualizations).
+*   **Mobile App (Flutter):** Cross-platform mobile app with offline support and camera scanning.
+*   **Community & Partnerships:** Collaborate with recycling centers, schools/colleges for awareness campaigns.
+*   **Scalability & Optimization:** Migrate data infrastructure (Firestore/BigQuery), implement load balancing, develop PWA.
+
+---
+
+## 👥 Team Details
+
+*   **Team Name:** Legion Hackers
+*   **Team Leader:** Rajath N H
+*   **Team Member 1: Prajnan Vaidya**
+*   **Team Member 2: Preeti Bhat**
+*   **Team Member 3: Yashaswini D B**
+
+---
+
