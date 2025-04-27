@@ -197,8 +197,7 @@ Trash2Cash offers a comprehensive platform featuring:
     npm start
     ```
     Access via `http://localhost:3000`.
-
-
+---
 
 ## ✨ Planned Features / Future Scope
 
