@@ -1,6 +1,5 @@
 # Trash2Cash: AI Assistant & Community Platform for Waste Management
 
-
 Trash2Cash is a dedicated AI chatbot platform developed for the Google Solution Challenge. It helps users manage e-waste responsibly by classifying items, suggesting disposal options (recycle, sell, repair, safe disposal), and fostering community awareness through an integrated forum and event listings.
 
 *Our solution aligns with the following United Nations Sustainable Development Goals (SDGs):*
@@ -13,9 +12,9 @@ Trash2Cash is a dedicated AI chatbot platform developed for the Google Solution 
 ## 📍 Project Links
 
 *   **Live MVP:** [https://trash-2-cash.vercel.app](https://trash-2-cash.vercel.app)
-*   **Demo Video:** [https://youtu.be/watch?v=29t3g7Ywg1c](youtube.com/watch?v=29t3g7Ywg1c)  <!-- *** Replace with your Video ID *** -->
+*   **Demo Video:** [https://youtu.be/29t3g7Ywg1c](https://youtu.be/29t3g7Ywg1c)
 *   **Presentation Slides:** [View Slides](https://docs.google.com/presentation/d/1I9J4DJtvCvxi7vRP36vee0WIRENECx-D/edit#slide=id.p1)
-*   **GitHub Repository:** [https://github.com/rajathnh/Trash-2-Cash](https://github.com/rajathnh/Trash-2-Cash) <!-- *** Update Link *** -->
+*   **GitHub Repository:** [https://github.com/rajathnh/Trash-2-Cash](https://github.com/rajathnh/Trash-2-Cash)
 
 ---
 
@@ -34,7 +33,7 @@ Trash2Cash offers a comprehensive platform featuring:
 5.  **📅 Events Page:** Auto-updated listings of recycling events (via Puppeteer scraping) to foster real-world engagement.
 
 ### How It Solves the Problem
-![Flowchart](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/flowchart-image.png?raw=true) <!-- *** Replace with link to flowchart image in your repo *** -->
+![Flowchart](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/flowchart.png?raw=true) <!-- *** UPDATE LINK if image path is different *** -->
 1. User visits the web app.
 2. Uploads an image or describes the e-waste item.
 3. The AI Chatbot (powered by Gemini) classifies the item and suggests next steps.
@@ -50,7 +49,6 @@ Trash2Cash offers a comprehensive platform featuring:
 ---
 
 ## ✨ Key Features
-
 
 **For Users:**
 *   **Image Upload:** Snap/upload e-waste images for instant identification.
@@ -71,26 +69,25 @@ Trash2Cash offers a comprehensive platform featuring:
 
 ## 🎬 Demo Video
 
-[![Watch the demo video]](youtube.com/watch?v=29t3g7Ywg1c) <!-- *** Replace with your Video ID *** -->
+[![Watch the demo video](https://img.youtube.com/vi/29t3g7Ywg1c/0.jpg)](https://youtu.be/29t3g7Ywg1c)
 *A short walkthrough of our core features, including the chatbot, image classification, forum, events, and disposal suggestions.*
 
 ---
 
 ## 📸 MVP Snapshots
 
-*(Based on Slide 7 - Embed these images directly)*
+*(Embed these images directly by uploading them to your repo and updating the links)*
 
-![ChatBot Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/chatbot-screenshot.png?raw=true) <!-- *** Replace link *** -->
-![Education Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/education-screenshot.png?raw=true) <!-- *** Replace link *** -->
-![Community Forum Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/forum-screenshot.png?raw=true) <!-- *** Replace link *** -->
-![Events Screenshot](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/events-screenshot.png?raw=true) <!-- *** Replace link *** -->
+![ChatBot Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/chatbot_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
+![Education Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/edu_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
+![Community Forum Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/forum_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
+![Events Screenshot](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/events_ss.png?raw=true) <!-- *** UPDATE LINK *** -->
 
 ---
 
 ## 🏗️ Architecture
 
-
-![Architecture Diagram](https://github.com/[Your GitHub Username]/[Your Repo Name]/blob/main/path/to/your/architecture-diagram.png?raw=true) <!-- *** Replace link *** -->
+![Architecture Diagram](https://github.com/rajathnh/Trash-2-Cash/blob/main/public/images/architecture.png?raw=true) <!-- *** UPDATE LINK *** -->
 *   **Frontend:** React (Hosted on Vercel)
 *   **Backend:** Node.js + Express (Hosted on Google Cloud Run)
 *   **Database:** MongoDB Atlas
@@ -99,7 +96,6 @@ Trash2Cash offers a comprehensive platform featuring:
 ---
 
 ## 🛠️ Technologies Used
-
 
 **Frontend:**
 *   **React.js:** Component-based UI library.
@@ -127,9 +123,17 @@ Trash2Cash offers a comprehensive platform featuring:
 
 ---
 
-## 🚀 Getting Started (For Developers)
+## ✨ Planned Features / Future Scope
 
-*(Includes detailed setup from previous README)*
+*   **Marketplace Integration:** Single-click listing on platforms like OLX, eBay via API integration.
+*   **E-waste Impact Tracker:** Allow users to track their environmental contribution (diversion metrics, visualizations).
+*   **Mobile App (Flutter):** Cross-platform mobile app with offline support and camera scanning.
+*   **Community & Partnerships:** Collaborate with recycling centers, schools/colleges for awareness campaigns.
+*   **Scalability & Optimization:** Migrate data infrastructure (Firestore/BigQuery), implement load balancing, develop PWA.
+
+---
+
+## 🚀 Getting Started (For Developers)
 
 <details>
 <summary>Click to expand Development Setup Instructions</summary>
@@ -153,8 +157,8 @@ Trash2Cash offers a comprehensive platform featuring:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/[Your GitHub Username]/[Your Repo Name].git # Replace link
-    cd [Your Repo Name]
+    git clone https://github.com/rajathnh/Trash-2-Cash.git
+    cd Trash-2-Cash
     ```
 
 2.  **Backend Setup:**
@@ -188,7 +192,7 @@ Trash2Cash offers a comprehensive platform featuring:
 1.  **Start the Backend Server:**
     ```bash
     cd backend # Or your backend directory
-    node chatbot.js
+    node server.js # Assuming server.js is the entry point
     ```
 
 2.  **Start the Frontend Development Server:**
@@ -197,17 +201,13 @@ Trash2Cash offers a comprehensive platform featuring:
     npm start
     ```
     Access via `http://localhost:3000`.
----
 
-## ✨ Planned Features / Future Scope
+### Running the Event Scraper (Optional/Manual)
+1.  Navigate to the backend directory.
+2.  Ensure Puppeteer is installed (`npm install puppeteer`).
+3.  Run: `node scripts/getEvents.js` (Adjust path if needed).
 
-
-
-*   **Marketplace Integration:** Single-click listing on platforms like OLX, eBay via API integration.
-*   **E-waste Impact Tracker:** Allow users to track their environmental contribution (diversion metrics, visualizations).
-*   **Mobile App (Flutter):** Cross-platform mobile app with offline support and camera scanning.
-*   **Community & Partnerships:** Collaborate with recycling centers, schools/colleges for awareness campaigns.
-*   **Scalability & Optimization:** Migrate data infrastructure (Firestore/BigQuery), implement load balancing, develop PWA.
+</details>
 
 ---
 
@@ -215,9 +215,8 @@ Trash2Cash offers a comprehensive platform featuring:
 
 *   **Team Name:** Legion Hackers
 *   **Team Leader:** Rajath N H
-*   **Team Member 1: Prajnan Vaidya**
-*   **Team Member 2: Preeti Bhat**
-*   **Team Member 3: Yashaswini D B**
+*   **Team Member:** Prajnan Vaidya
+*   **Team Member:** Preeti Bhat
+*   **Team Member:** Yashaswini D B
 
 ---
-
