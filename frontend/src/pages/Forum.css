@@ -405,3 +405,8 @@ video {
     scroll-behavior: auto;
   }
 }
+
+.forum-messages {
+  scroll-behavior: smooth;
+  transition: scroll-top 0.5s ease-in-out;
+}

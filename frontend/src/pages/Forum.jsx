@@ -99,9 +99,20 @@ const Forum = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      // Add new message to top and scroll to it
       setMessages(prev => [response.data.data, ...prev]);
-      setSuccessMessage("Message posted!");
       
+      // Smooth scroll to top after state update
+      setTimeout(() => {
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        }
+      }, 100);
+
+      setSuccessMessage("Message posted!");
       setNewMessage("");
       setMedia(null);
       
