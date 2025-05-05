@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Forum.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FiImage, FiSend, FiVideo, FiCheckCircle,FiChevronDown } from "react-icons/fi";
+import { FiImage, FiSend, FiVideo, FiCheckCircle, FiChevronDown } from "react-icons/fi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -15,23 +15,32 @@ const Forum = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [isNearBottom, setIsNearBottom] = useState(true);
-  const messagesEndRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const successTimeout = useRef(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalMessages, setTotalMessages] = useState(0);
+  
   const messagesContainerRef = useRef(null);
   const prevScrollInfo = useRef({ height: 0, top: 0 });
-  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const fileInputRef = useRef(null);
+  const successTimeout = useRef(null);
 
   const userId = localStorage.getItem("userId") || "guest_" + Math.random().toString(36).substring(2, 11);
   const userName = localStorage.getItem("userName") || "Anonymous";
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const maintainScrollPosition = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    container.scrollTop = container.scrollHeight - prevScrollInfo.current.height + prevScrollInfo.current.top;
+  };
+
+  const saveScrollPosition = () => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      prevScrollInfo.current = {
+        height: container.scrollHeight,
+        top: container.scrollTop
+      };
+    }
   };
 
   const fetchMessages = async (newPage = 1) => {
@@ -41,61 +50,37 @@ const Forum = () => {
         params: { page: newPage, limit: 20 }
       });
       
-      setMessages(prev => newPage === 1 ? 
+      setMessages(prev => 
+        newPage === 1 ? 
         response.data.messages : 
         [...prev, ...response.data.messages]
       );
       setHasMore(response.data.hasMore);
       setTotalMessages(response.data.total);
-      setError("");
+      
     } catch (error) {
-      setError("Failed to load messages. Please try refreshing the page.");
+      setError("Failed to load messages. Please try refreshing.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleLoadMore = async () => {
-    // Save current scroll position
-    const messagesContainer = document.querySelector('.forum-messages');
-    const prevScrollHeight = messagesContainer.scrollHeight;
-    const prevScrollTop = messagesContainer.scrollTop;
-  
+    saveScrollPosition();
     try {
       const newPage = page + 1;
       setPage(newPage);
-      
       const response = await axios.get(`${BACKEND_URL}/api/forum`, {
         params: { page: newPage, limit: 20 }
       });
-  
-      setMessages(prev => [...response.data.messages, ...prev]);
+
+      setMessages(prev => [...prev, ...response.data.messages]);
       setHasMore(response.data.hasMore);
-  
-      // Restore scroll position after update
-      requestAnimationFrame(() => {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight - prevScrollHeight + prevScrollTop;
-      });
+      
+      requestAnimationFrame(maintainScrollPosition);
     } catch (error) {
-      console.error('Error loading more messages:', error);
+      console.error('Error loading messages:', error);
     }
-  };
-
-  useEffect(() => {
-    fetchMessages();
-    const intervalId = setInterval(() => fetchMessages(1), 5000);
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    if (isNearBottom && messages.length > 0) {
-      scrollToBottom();
-    }
-  }, [messages]);
-  
-  const checkScrollPosition = (e) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.target;
-    setIsNearBottom(scrollHeight - scrollTop - clientHeight < 100);
   };
 
   const handleSubmit = async (e) => {
@@ -103,64 +88,44 @@ const Forum = () => {
     if (!newMessage.trim() && !media) return;
     
     try {
-      setIsSubmitting(true); 
+      setIsSubmitting(true);
       const formData = new FormData();
       formData.append("userId", userId);
       formData.append("userName", userName);
       formData.append("message", newMessage);
       if (media) formData.append("media", media);
 
-      await axios.post(`${BACKEND_URL}/api/forum`, formData, {
+      const response = await axios.post(`${BACKEND_URL}/api/forum`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setSuccessMessage("Message posted successfully!");
-      clearTimeout(successTimeout.current);
-      successTimeout.current = setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-
+      setMessages(prev => [response.data.data, ...prev]);
+      setSuccessMessage("Message posted!");
+      
       setNewMessage("");
       setMedia(null);
-      await fetchMessages();
+      
+      clearTimeout(successTimeout.current);
+      successTimeout.current = setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      console.error("Error posting message:", error);
       setError("Failed to post message. Please try again.");
-    }
-    finally {
-      setIsSubmitting(false); // Stop loading
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleMediaClick = () => {
-    fileInputRef.current.click();
-  };
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
-  const generateAvatar = (name, isOwn) => {
-    const colors = ['#FFB399', '#FF99C8', '#FCF6BD', '#D0F4DE', '#A9DEF9'];
-    const hash = name.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
-    const color = colors[hash % colors.length];
-    
-    return (
-      <div className={`user-avatar ${isOwn ? 'own-avatar' : ''}`} style={{ backgroundColor: color }}>
-        {name.charAt(0).toUpperCase()}
-      </div>
-    );
+  const checkScrollPosition = (e) => {
+    const { scrollTop } = e.target;
   };
-
-  
 
   return (
     <>
       <Navbar />
-      {/* Success Notification at Top */}
+      
       {successMessage && (
         <div className="upload-success">
           <FiCheckCircle className="mr-2" />
@@ -168,7 +133,6 @@ const Forum = () => {
         </div>
       )}
 
-      {/* Submitting Overlay */}
       {isSubmitting && (
         <div className="submitting-overlay">
           <div className="submitting-spinner"></div>
@@ -185,75 +149,75 @@ const Forum = () => {
 
         {error && <div className="forum-error">{error}</div>}
 
-        <div className="forum-messages" onScroll={checkScrollPosition}>
-  {loading && messages.length === 0 ? (
-    <div className="loading-spinner"></div>
-  ) : messages.length === 0 ? (
-    <div className="empty-state">
-      <img src="/forum-empty.svg" alt="Empty forum" />
-      <p>No discussions yet. Start the conversation!</p>
-    </div>
-  ) : (
-    <>
-      {messages.map((msg) => (
-        <div key={msg._id} className={`message ${msg.userId === userId ? "own-message" : ""}`}>
-          {generateAvatar(msg.userName, msg.userId === userId)}
-          <div className="message-content">
-            <div className="message-header">
-              <span className="username">{msg.userName}</span>
-              <span className="timestamp">
-                {new Date(msg.timestamp).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric'
-                })} • {new Date(msg.timestamp).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </span>
+        <div 
+          className="forum-messages" 
+          ref={messagesContainerRef}
+          onScroll={checkScrollPosition}
+        >
+          {loading && messages.length === 0 ? (
+            <div className="loading-spinner"></div>
+          ) : messages.length === 0 ? (
+            <div className="empty-state">
+              <img src="/forum-empty.svg" alt="Empty forum" />
+              <p>No discussions yet. Start the conversation!</p>
             </div>
-            {msg.message && <p className="text">{msg.message}</p>}
-            {msg.mediaUrl && (
-              <div className="message-media">
-                {msg.mediaType === 'video' ? (
-                  <video controls className="media-player">
-                    <source src={msg.mediaUrl} type="video/mp4" />
-                    Your browser does not support videos
-                  </video>
-                ) : (
-                  <img 
-                    src={msg.mediaUrl} 
-                    alt="Uploaded content" 
-                    className="media-image"
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
+          ) : (
+            <>
+              {messages.map((msg) => (
+                <div key={msg._id} className={`message ${msg.userId === userId ? "own-message" : ""}`}>
+                  <div className="user-avatar">
+                    {msg.userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="message-content">
+                    <div className="message-header">
+                      <span className="username">{msg.userName}</span>
+                      <span className="timestamp">
+                        {new Date(msg.timestamp).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric'
+                        })} • {new Date(msg.timestamp).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </span>
+                    </div>
+                    {msg.message && <p className="text">{msg.message}</p>}
+                    {msg.mediaUrl && (
+                      <div className="message-media">
+                        {msg.mediaType === 'video' ? (
+                          <video controls>
+                            <source src={msg.mediaUrl} type="video/mp4" />
+                          </video>
+                        ) : (
+                          <img src={msg.mediaUrl} alt="Content" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
 
-{messages.length > 0 && hasMore && (
-  <div className="load-more-container">
-    <button 
-      onClick={handleLoadMore}
-      className="load-more-btn"
-      disabled={loading}
-    >
-      {loading ? (
-        <div className="submitting-spinner small"></div>
-      ) : (
-        <>
-          <FiChevronDown />
-          Load More ({totalMessages - messages.length} remaining)
-        </>
-      )}
-    </button>
-  </div>
-)}
-    </>
-  )}
-  <div ref={messagesEndRef} />
-</div>
+              {hasMore && (
+                <div className="load-more-container">
+                  <button 
+                    onClick={handleLoadMore}
+                    className="load-more-btn"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div className="submitting-spinner small"></div>
+                    ) : (
+                      <>
+                        <FiChevronDown />
+                        Load More ({totalMessages - messages.length} remaining)
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
 
         <form onSubmit={handleSubmit} className="message-form">
           <div className="form-group">
@@ -261,20 +225,18 @@ const Forum = () => {
               <textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={handleKeyPress}
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSubmit(e)}
                 placeholder="Write your message... (Shift+Enter for new line)"
                 rows="3"
               />
-
               <div className="action-buttons">
                 <button
                   type="button"
                   className="media-btn"
-                  onClick={handleMediaClick}
+                  onClick={() => fileInputRef.current.click()}
                 >
                   <FiImage /><FiVideo /> Media
                 </button>
-                
                 <input
                   type="file"
                   accept="image/*, video/*"
@@ -282,26 +244,29 @@ const Forum = () => {
                   ref={fileInputRef}
                   hidden
                 />
-                
-                <button type="submit" className="send-btn" disabled={isSubmitting}>
-                {isSubmitting ? (
-              <div className="submitting-spinner small"></div>
-            ) : ( <><FiSend /> Post</> )}
+                <button 
+                  type="submit" 
+                  className="send-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="submitting-spinner small"></div>
+                  ) : (
+                    <><FiSend /> Post</>
+                  )}
                 </button>
               </div>
             </div>
-
             {media && (
               <div className="media-preview">
                 {media.type.startsWith('video') ? (
                   <video controls>
-                    <source src={URL.createObjectURL(media)} type={media.type} />
+                    <source src={URL.createObjectURL(media)} />
                   </video>
                 ) : (
                   <img src={URL.createObjectURL(media)} alt="Preview" />
                 )}
                 <button
-                  type="button"
                   className="remove-media"
                   onClick={() => setMedia(null)}
                 >
