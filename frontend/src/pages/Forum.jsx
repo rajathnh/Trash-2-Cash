@@ -220,7 +220,7 @@ const Forum = () => {
                     ) : (
                       <>
                         <FiChevronDown />
-                        Load More ({totalMessages - messages.length} remaining)
+                        Load More 
                       </>
                     )}
                   </button>

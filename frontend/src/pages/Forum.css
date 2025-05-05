@@ -410,3 +410,109 @@ video {
   scroll-behavior: smooth;
   transition: scroll-top 0.5s ease-in-out;
 }
+
+/* Load More Button Styles */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  margin: 1rem 0;
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(38, 20, 74, 0.9) 0%,
+    rgba(42, 157, 210, 0.9) 100%
+  );
+  color: white;
+  box-shadow: 
+    0 4px 24px rgba(45, 179, 227, 0.2),
+    0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.load-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.15) 25%,
+    transparent 50%,
+    rgba(255,255,255,0.15) 75%
+  );
+  background-size: 200% 200%;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 32px rgba(45, 179, 227, 0.3),
+    0 4px 16px rgba(0,0,0,0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 179, 227, 1) 0%,
+    rgba(42, 157, 210, 1) 100%
+  );
+}
+
+.load-more-btn:hover::before {
+  animation: shimmer 2s linear infinite;
+  opacity: 0.8;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 179, 227, 0.5) 0%,
+    rgba(42, 157, 210, 0.5) 100%
+  );
+}
+
+.load-more-btn svg {
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.load-more-btn:hover:not(:disabled) svg {
+  transform: translateY(2px);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .load-more-btn {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .load-more-container {
+    padding: 1.5rem 0;
+    margin: -1.5rem 0 1.5rem;
+  }
+}
